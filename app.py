@@ -4,7 +4,7 @@ from tmdbv3api import Movie, TMDb
 
 movie = Movie()
 tmdb = TMDb()
-tmdb.api_key = 'your api key'
+tmdb.api_key = '284763b55aba06fa87a85e679c64add1'
 tmdb.language = 'ko-KR'
 
 def get_recommendations(title):
