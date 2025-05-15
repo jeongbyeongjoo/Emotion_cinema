@@ -62,11 +62,16 @@ main {
         width: 100%;
         max-width: 1344px;
         overflow: hidden;
+        position: relative;
+        left: 0;
+        /* 기본값 설정 */
 }
 
-#Banner ul {
+#BannerList {
     display: flex;
-        gap: 12px;
+    position: relative;
+    left: 0;
+    transition: left 0.5s;
 }
 
 .banner {
@@ -82,20 +87,25 @@ main {
         object-fit: cover;
 }
 
+#Banner_button {
+    margin-bottom: 24px;
+    /* 적당한 간격 확보 */
+}
+
 #Banner_button ul,
 #Channel_button ul {
     display: flex;
-    justify-content: center;
-    margin-top: 12px;
-    gap: 6px;
+        justify-content: center;
+        margin-top: 12px;
+        gap: 6px;
 }
 
 #Banner_button ul li,
 #Channel_button ul li {
     width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
 }
 
 #Banner_button ul li:nth-child(2),
@@ -104,18 +114,84 @@ main {
 }
 
 #Channel {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-        overflow-x: auto;
-        gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    /* 수평으로 한 줄 정렬 */
     padding: 0 20px;
+    -ms-overflow-style: none;
+    /* IE */
+    scrollbar-width: none;
+    /* Firefox */
+    position: relative;
+    touch-action: pan-x;
 }
 
-#Channel .channels {
+#ChannelList {
+    display: flex;
+    gap: 12px;
+}
+
+/* 리스트 항목이 한 줄로 정렬되게 */
+#ChannelList li {
+    flex: 0 0 auto;
+    list-style: none;
+}
+
+/* 채널 이미지 스타일 */
+#Channel {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.channel-wrapper {
+    position: relative;
+    max-width: 100%;
+        margin: 0 auto;
+        padding: 0 40px;
+        /* 버튼이 너무 바깥으로 가지 않도록 */
+    }
+
+.channels {
     width: 268px;
     height: 100px;
     object-fit: cover;
+        border-radius: 12px;
+    }
+
+#Channel::-webkit-scrollbar {
+    display: none;
+}
+
+#Channel {
+    -ms-overflow-style: none;
+    /* IE */
+    scrollbar-width: none;
+    /* Firefox */
+    touch-action: pan-x;
+}
+
+#left_button,
+#right_button {
+    position: absolute;
+    top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        z-index: 10;
+}
+
+#left_button {
+    left: 16px;
+}
+
+#right_button {
+    right: 16px;
 }
 
 #top {
