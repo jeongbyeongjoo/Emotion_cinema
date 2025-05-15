@@ -1,478 +1,154 @@
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  font-family: "Noto Sans KR", sans-serif;
-  background: black;
-  width: 100vi;
-  overflow-x: hidden;
-}
-
+/* 공통 초기화 */
 * {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.container {
-  width: 100vi;
-  height: auto;
-  overflow: hidden;
-}
-
-.circle-container {
-  left: 1270px;
-  top: 567px;
-  position: absolute;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 6px;
-  display: inline-flex;
-}
-
-.circle {
-  width: 10px;
-  height: 10px;
-  position: relative;
-  border-radius: 360px;
-}
-
-.white {
-  background: white;
-}
-
-.transparent {
-  background: rgba(255, 255, 255, 0.3);
+    margin: 0;
+    padding: 0;
+        list-style: none;
+            box-sizing: border-box;
+        }
+        
+        html,
+        body {
+            height: 100%;
+    font-family: "Noto Sans KR", sans-serif;
+        background: black;
+    color: white;
+        overflow-x: hidden;
 }
 
 .header {
-  width: 100vi;
-  height: 88px;
-  left: 0px;
-  top: 0px;
-  position: absolute;
-  background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* 양쪽 끝으로 정렬 */
+    padding: 0 32px;
+    /* 좌우 여백 */
+    height: 88px;
+    background: rgba(0, 0, 0, 0.3);
 }
 
-#Banner {
-  position: absolute;
-  top:88px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 4056px;
-  height: 525px;
-  /*background: aqua;*/
+.left-group {
+    display: flex;
+    align-items: center;
+    gap: 36px;
 }
 
-#Banner ul {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.banner {
-  margin-right: 12px;
-  position: relative;
-  width: 1344px;
-  height: 525px;
-  /*background: aqua;*/
-  border-radius: 20px;
-  overflow: hidden;
-  float: left;
-}
-
-.banner:last-child {
-  margin: 0;
-}
-
-.banner img {
-  margin: 0;
-  padding: 0;
-}
-
-#Banner_button ul {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
-  top: 630px;
-}
-
-#Banner_button ul li {
-  float: left;
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  margin-right: 6px;
-}
-
-#Channel_button ul {
-  position: absolute;
-  right: 20px;
-  top: 646px;
-}
-
-#Banner_button ul li:nth-child(2) {
-  background: #FFFFFF;
-}
-
-#Channel_button ul li {
-  float: left;
-  width: 7px;
-  height: 7px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  margin-right: 6px;
-}
-
-#Channel_button ul li:nth-child(1) {
-  background: #FFFFFF;
-}
-
-.tving-logo {
-  left: 32px;
-  position: absolute;
-  top : 50%;
-  transform: translate(0, -50%);
-}
-
-.user-icon {
-  right: 32px;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
+main {
+    flex: 1;
 }
 
 .menu {
-  color: white;
-  list-style: none;
-  /* float: left; */
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  margin: 0;
-  padding: 0;
-  left: 250px;/* 로고 크기 + 로고 레프트 값 + @ */
+    display: flex;
+    gap: 36px;
+    font-size: 20px;
+    font-weight: 200;
 }
 
 .menu li {
-  float: left;/* 왼쪽을 기준점 잡기 */
-  margin-right: 36px;
-  font-size: 20px;
-  font-weight: 300;
+    list-style: none;
+}
+.emotion_cinema-logo {
+    padding-top: 10px;
+    height: 80px
+
+}
+.user-icon {
+    height: 40px;
 }
 
-/* .header img:last-child {
-  width: 40px;
-  height: 40px;
-  left: 1352px;
-  top: 25px;
-  position: absolute;
-} */
-
-.notification {
-  width: 40px;
-  height: 40px;
-  left: 1280px;
-  top: 25px;
-  position: absolute;
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
+#Banner {
+    display: flex;
+        justify-content: center;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 1344px;
+        overflow: hidden;
 }
 
-.notification-circle {
-  width: 40px;
-  height: 40px;
-  position: relative;
-  opacity: 1;
+#Banner ul {
+    display: flex;
+        gap: 12px;
 }
 
-.notification-circle div {
-  width: 40px;
-  height: 40px;
-  left: 0px;
-  top: 0px;
-  position: absolute;
-  border: 2px rgba(255, 255, 255, 0.7) solid;
+.banner {
+    width: 1344px;
+        height: 525px;
+    border-radius: 20px;
+        overflow: hidden;
 }
 
-.content-container {
-  left: -1308px;
-  top: 88px;
-  position: absolute;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 12px;
-  display: inline-flex;
+.banner img {
+    width: 100%;
+        height: 100%;
+        object-fit: cover;
 }
 
-.section {
-  width: 1344px;
-  height: 525px;
-  position: relative;
+#Banner_button ul,
+#Channel_button ul {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 6px;
 }
 
-.gradient-background {
-  width: 1344px;
-  height: 173px;
-  left: 0px;
-  top: 352px;
-  position: absolute;
-  background: linear-gradient(
-    167deg,
-    rgba(104.92, 102.79, 102.79, 0) 0%,
-    rgba(56.72, 55.85, 55.85, 0.02) 20%,
-    rgba(59.42, 59.42, 59.42, 0.07) 34%,
-    rgba(45.55, 45.55, 45.55, 0.34) 65%,
-    rgba(36.31, 36.31, 36.31, 0.6) 100%
-  );
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+#Banner_button ul li,
+#Channel_button ul li {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
 }
 
-.section-image {
-  width: 1344px;
-  height: 525px;
-  left: 0px;
-  top: 0px;
-  position: absolute;
-  border-radius: 16px;
-}
-
-
-
-.title {
-  font-size: 22px;
-  font-family: Noto Sans KR;
-  font-weight: 400;
-  line-height: 30px;
-  word-wrap: break-word;
-}
-
-.logo {
-  width: 360px;
-  height: 78px;
-  position: absolute;
-}
-
-.big-title {
-  font-size: 50px;
-  font-weight: 700;
-  line-height: 64px;
-}
-
-.subtitle {
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 32px;
-  word-wrap: break-word;
-}
-.flex-container {
-  left: 48px;
-  top: 659px;
-  position: absolute;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 8px;
-  display: inline-flex;
-}
-
-.box-container {
-  width: 268px;
-  height: 100px;
-  padding-top: 23px;
-  padding-bottom: 22px;
-  padding-left: 79px;
-  padding-right: 79px;
-  background: linear-gradient(180deg, #353535 0%, #1a1a1a 100%);
-  border-radius: 4px;
-  overflow: hidden;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.box {
-  width: 110px;
-  height: 55px;
-}
-
-.arrow-container {
-  width: 56px;
-  height: 52px;
-  left: 1392px;
-  top: 324.5px;
-  position: absolute;
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
-}
-
-.arrow {
-  width: 56px;
-  height: 52px;
-  position: relative;
-  /* Arrow styles go here */
-}
-
-.additional-box {
-  width: 48px;
-  height: 52px;
-  left: -8px;
-  top: 324.5px;
-  position: absolute;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
-}
-.top-container {
-  left: 1404px;
-  top: 646px;
-  position: absolute;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 6px;
-  display: inline-flex;
-}
-
-.dot-container {
-  display: flex;
-  gap: 6px;
-}
-
-.dot {
-  width: 5px;
-  height: 5px;
-  background: white;
-  border-radius: 360px;
-}
-
-.dot-transparent {
-  width: 5px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 360px;
-}
-
-.title {
-  left: 49px;
-  top: 787px;
-  position: absolute;
-  color: white;
-  font-size: 22px;
-  font-family: Noto Sans KR;
-  font-weight: 700;
-  line-height: 30px;
-  word-wrap: break-word;
-}
-
-.numbered-images {
-  left: 62px;
-  top: 829px;
-  position: absolute;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 16px;
-  display: inline-flex;
-}
-
-.numbered-image {
-  display: flex;
-  gap: 4px;
-  justify-content: flex-start;
-  align-items: flex-end;
-}
-
-.number {
-  color: white;
-  font-size: 80px;
-  /*font-family: 87mm ILSANG;*/
-  font-weight: 400;
-  line-height: 60px;
-  word-wrap: break-word;
-}
-
-.numbered-image img {
-  width: 199px;
-  height: 287px;
-  border-radius: 4px;
-}
-
-#left_button {
-  position: absolute;
-  top: 683px;
-  left: -4px;
-}
-
-#right_button {
-  position: absolute;
-  top: 683px;
-  right: -4px;
+#Banner_button ul li:nth-child(2),
+#Channel_button ul li:nth-child(1) {
+    background: white;
 }
 
 #Channel {
-  overflow: hidden;
-  position: absolute;
-  width: 1932px;
-  height: 100px;
-  /*background: aqua;*/
-  top: 659px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+        overflow-x: auto;
+        gap: 8px;
+    padding: 0 20px;
 }
 
 #Channel .channels {
-  position: relative;
-  width: 268px;
-  height: 100px;
-  /*background: aqua;*/
-  float: left;
-  margin-right: 8px;
-}
-
-#today\'s {
-  position: absolute;
-  top: 787px;
-  left: 49px;
-  color: #FFF;
-  font-family: Noto Sans KR, serif;
-  font-size: 22px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 30px; /* 136.364% */
+    width: 268px;
+    height: 100px;
+    object-fit: cover;
 }
 
 #top {
-  overflow-x: scroll;
-  position: absolute;
-  top: 829px;
-  left: 62px;
-  width: 95%;
+    margin-top: 40px;
+    padding: 0 20px;
+    overflow-x: auto;
 }
 
 #top ul {
-  width: 2710px;
+    display: flex;
+    gap: 20px;
 }
 
 #top .top {
-  float: left;
-  margin-right: 20px;
-}
-.footer {
-    display: flex;
-    padding: 30px;
+    width: 199px;
+    height: 287px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
-.footer>div:first-child {
-    flex: 3;
+#today\'s {
+    margin: 40px 20px 10px;
+        font-size: 22px;
+    font-weight: 700;
+}
+
+footer {
+    background-color: #222;
+    padding: 20px;
     text-align: center;
     color: #fff;
 }
 
-.footer>div:last-child {
-    flex: 9;
-    color: #fff;
+.footer>div {
+    margin-bottom: 10px;
 }
