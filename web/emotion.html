@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Emotion_cinema</title>
 </head>
 <body>
     <div class="header">
         <div class="left">
             <a href="emotion.html" id="logo">
-                <img src="logo.png">
+                <img src="image/logo.png">
             </a>
         </div>
 
@@ -21,24 +21,25 @@
                 <input type="text" placeholder="검색어를 입력해주세요.">
             </div>
 
-            <a id="profile">
-                <img src="profile.png">
+            <a href="Teachable/teachable.html" id="profile">
+                <img src="image/profile.png">
             </a>
         </div>
     </div>
     <div class="slider">
         <div class="slides">
-          <img src="샤크.png" alt="배너1" class="slide">
-          <img src="칸타빌레.png" alt="배너2" class="slide">
+          <div class="slide"><img src="image/샤크.png" alt="배너1"></div>
+          <div class="slide"><img src="image/칸타빌레.png" alt="배너2"></div>
+          <div class="slide"><img src="image/샤크.png" alt="배너3"></div>
         </div>
-      
-        <!-- 점 네비게이션 -->
+        
         <div class="dots">
           <span class="dot" onclick="currentSlide(0)"></span>
           <span class="dot" onclick="currentSlide(1)"></span>
-          <!--<span class="dot" onclick="currentSlide(2)"></span>-->
+          <span class="dot" onclick="currentSlide(2)"></span>
         </div>
-    </div>
-<script src="js/slidebanner.js"></script>  
+    </div>      
+<script src="js/slidebanner.js"></script>
+<script src="js/popup.js"></script> 
 </body>
 </html>
