@@ -218,13 +218,24 @@ main {
     font-weight: 700;
 }
 
-footer {
+.footer {
+    display: flex;
     background-color: #222;
     padding: 20px;
-    text-align: center;
     color: #fff;
 }
 
 .footer>div {
     margin-bottom: 10px;
+}
+
+.footer>div:first-child {
+    flex: 3;
+    text-align: center;
+    color: #fff;
+}
+
+.footer>div:last-child {
+    flex: 9;
+    color: #fff;
 }
