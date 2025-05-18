@@ -1,8 +1,17 @@
-body {
-    background-color: black;
+
+/* 공통 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    font-family: "Noto Sans KR", sans-serif;
+    background: black;
     color: white;
-    display: flex;
-    flex-direction: column;
+    overflow-x: hidden;
 }
 
 .header {
@@ -102,7 +111,7 @@ body {
   z-index: 10;
 }
   
-  .dot {
+.dot {
     height: 10px;
     width: 10px;
     margin: 0 6px;
@@ -110,18 +119,10 @@ body {
     border-radius: 50%;
     display: inline-block;
     cursor: pointer;
-  }
-  .dot.active {
+}
+.dot.active {
     background-color: white;
-  }
-  
-/* --------- */
-
-/* .autocomplete-container {
-  width: 300px;
-  position: relative;
-  margin: 100px auto;
-} */
+}
 
 #searchInput {
   width: 100%;
@@ -140,15 +141,234 @@ body {
   background-color: #111;
   position: absolute;
   /* width: 100%; */
-  z-index: 1000;
+  z-index: 1000; /*우선순위*/
 }
 
 #suggestions li {
-  padding: 10px;
-  cursor: pointer;
-
+    padding: 10px;
+    cursor: pointer;
 }
 
 #suggestions li:hover {
-  background-color: #222;
+    background-color: #222;
+}
+
+.left-group {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    height: 100px;
+}
+
+main {
+    flex: 1;
+}
+
+.menu {
+    display: flex;
+    gap: 36px;
+    font-size: 20px;
+    font-weight: 200;
+}
+
+.menu li {
+    list-style: none;
+}
+.emotion_cinema-logo {
+    padding-top: 10px;
+    height: 80px
+
+}
+.user-icon {
+    height: 40px;
+}
+
+#Banner {
+    display: flex;
+        justify-content: center;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 1344px;
+        overflow: hidden;
+        position: relative;
+        left: 0;
+        /* 기본값 설정 */
+}
+
+#BannerList {
+    display: flex;
+    position: relative;
+    left: 0;
+    transition: left 0.5s;
+}
+
+.banner {
+    width: 1344px;
+        height: 525px;
+    border-radius: 20px;
+        overflow: hidden;
+}
+
+.banner img {
+    width: 100%;
+        height: 100%;
+        object-fit: cover;
+}
+
+#Banner_button {
+    margin-bottom: 24px;
+    /* 적당한 간격 확보 */
+}
+
+#Banner_button ul,
+#Channel_button ul {
+    display: flex;
+        justify-content: center;
+        margin-top: 12px;
+        gap: 6px;
+}
+
+#Banner_button ul li,
+#Channel_button ul li {
+    width: 10px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+}
+
+#Banner_button ul li:nth-child(2),
+#Channel_button ul li:nth-child(1) {
+    background: white;
+}
+
+#Channel {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    /* 수평으로 한 줄 정렬 */
+    padding: 0 20px;
+    -ms-overflow-style: none;
+    /* IE */
+    scrollbar-width: none;
+    /* Firefox */
+    position: relative;
+    touch-action: pan-x;
+}
+
+#ChannelList {
+    display: flex;
+    gap: 12px;
+}
+
+/* 리스트 항목이 한 줄로 정렬되게 */
+#ChannelList li {
+    flex: 0 0 auto;
+    list-style: none;
+}
+
+/* 채널 이미지 스타일 */
+#Channel {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.channel-wrapper {
+    position: relative;
+    max-width: 100%;
+        margin: 0 auto;
+        padding: 0 40px;
+        /* 버튼이 너무 바깥으로 가지 않도록 */
+    }
+
+.channels {
+    width: 268px;
+    height: 100px;
+    object-fit: cover;
+        border-radius: 12px;
+    }
+
+#Channel::-webkit-scrollbar {
+    display: none;
+}
+
+#Channel {
+    -ms-overflow-style: none;
+    /* IE */
+    scrollbar-width: none;
+    /* Firefox */
+    touch-action: pan-x;
+}
+
+#left_button,
+#right_button {
+    position: absolute;
+    top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        z-index: 10;
+}
+
+#left_button {
+    left: 16px;
+}
+
+#right_button {
+    right: 16px;
+}
+
+#top {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    overflow-x: auto;
+}
+
+#top::-webkit-scrollbar {
+    display: none;
+}
+
+#top ul {
+    display: flex;
+    gap: 20px;
+}
+
+#top .top {
+    width: 253px;
+    height: 312px;
+    /* object-fit: cover; */
+    border-radius: 4px;
+}
+
+#today\'s {
+    margin: 40px 20px 10px;
+        font-size: 22px;
+    font-weight: 700;
+}
+
+.footer {
+    display: flex;
+    background-color: #222;
+    padding: 20px;
+    color: #fff;
+}
+
+.footer>div {
+    margin-bottom: 10px;
+}
+
+.footer>div:first-child {
+    flex: 3;
+    text-align: center;
+    color: #fff;
+}
+
+.footer>div:last-child {
+    flex: 9;
+    color: #fff;
 }
