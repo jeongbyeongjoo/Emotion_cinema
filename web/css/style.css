@@ -177,7 +177,6 @@ main {
 .emotion_cinema-logo {
     padding-top: 10px;
     height: 80px
-
 }
 .user-icon {
     height: 40px;
@@ -372,3 +371,50 @@ main {
     flex: 9;
     color: #fff;
 }
+
+  
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  #movie-container {
+    padding-top: 60px;
+  }
+  
+  .genre-section {
+    margin-bottom: 40px;
+  }
+  
+  .genre-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #555;
+    padding-bottom: 5px;
+    padding-left: 10px;
+  }
+  
+  /* ✅ 슬라이딩 가능하게 변경 */
+  .movie-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+    padding-left: 10px;
+  }
+  
+  .movie-card {
+    flex: 0 0 auto;
+    width: 140px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .movie-card img {
+    width: 100%;
+    border-radius: 8px;
+    pointer-events: none; /* 이미지 위에서 드래그 가능하게 */
+  }
+  
