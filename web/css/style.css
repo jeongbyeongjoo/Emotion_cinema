@@ -175,10 +175,12 @@ main {
     list-style: none;
 }
 .emotion_cinema-logo {
+    padding-left: 20px;
     padding-top: 10px;
     height: 80px
 }
 .user-icon {
+    padding-right: 20px;
     height: 40px;
 }
 
