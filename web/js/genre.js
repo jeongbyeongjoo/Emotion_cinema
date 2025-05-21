@@ -8,12 +8,22 @@ const GENRE_MAP = {
   10752: "War", 37: "Western"
 };
 
+// Fisher-Yates shuffle 함수
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 fetch('json/all_movies.json')
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById('movie-container');
     const genreMap = {};
 
+    // 각 장르에 해당하는 영화 모으기
     data.forEach(movie => {
       if (!movie.genre_ids || !movie.poster_path || !movie.title) return;
 
@@ -21,12 +31,11 @@ fetch('json/all_movies.json')
 
       genres.forEach(genre => {
         if (!genreMap[genre]) genreMap[genre] = [];
-        if (genreMap[genre].length < 20) {
-          genreMap[genre].push(movie);
-        }
+        genreMap[genre].push(movie);
       });
     });
 
+    // 장르별 섹션 만들기
     for (const [genre, movies] of Object.entries(genreMap)) {
       const section = document.createElement('div');
       section.className = 'genre-section';
@@ -39,8 +48,10 @@ fetch('json/all_movies.json')
       const grid = document.createElement('div');
       grid.className = 'movie-grid';
 
-      movies.forEach(movie => {
-        // <a>가 카드 전체를 감쌈
+      // 영화 리스트 랜덤하게 섞고 최대 20개만 출력
+      const selectedMovies = shuffleArray([...movies]).slice(0, 20);
+
+      selectedMovies.forEach(movie => {
         const card = document.createElement('a');
         card.className = 'movie-card';
         card.href = `movie_detail/detail.html?id=${movie.id}`;

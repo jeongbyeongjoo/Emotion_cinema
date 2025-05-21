@@ -1,96 +1,144 @@
 /* 전체 배경 및 기본 텍스트 스타일 */
 body {
-    background: radial-gradient(ellipse at center, #1c3c4c 0%, #121212 100%);
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 40px;
-  }
-  
-  /* 헤더 로고 */
-  .header {
-    display: flex;
-    align-items: center;
-    padding: 0 40px;
-  }
-  
-  .emotion_cinema-logo {
-    height: 80px;
-    cursor: pointer;
-  }
-  
-  /* 상세 페이지 레이아웃 (좌측 설명 + 우측 포스터) */
-  .detail-container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 60px;
-    max-width: 1200px;
-    margin: 60px auto 0;
-    flex-wrap: wrap;
-  }
-  
-  .detail-left {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  .detail-right img {
-    width: 350px;
-    border-radius: 12px;
-    border: none;
-    box-shadow: none;
-    background: none;
-  }
-  
-  /* 제목 */
-  #movie-title {
-    font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 16px;
-    color: #ffcc00;
-  }
-  
-  /* 태그들 */
-  #movie-tags {
-    margin-bottom: 14px;
-  }
-  
-  #movie-tags span {
-    display: inline-block;
-    background: rgba(255,255,255,0.15);
-    border-radius: 6px;
-    padding: 4px 10px;
-    margin-right: 8px;
-    font-size: 14px;
-  }
-  
-  /* 버튼들 */
-  .movie-buttons {
-    margin: 20px 0;
-  }
-  
-  .movie-buttons button {
-    background: white;
-    color: black;
-    border: none;
-    padding: 10px 16px;
-    margin-right: 10px;
-    font-weight: bold;
-    font-size: 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .movie-buttons button:hover {
-    background: #ddd;
-  }
-  
-  /* 정보 텍스트 */
-  .detail-left p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 10px;
-  }
-  
+  background: radial-gradient(ellipse at center, #1c3c4c 0%, #121212 100%);
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 40px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px 40px;
+}
+
+.close-link {
+  font-size: 32px;
+  color: white;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-link:hover {
+  color: #ff6666;
+}
+
+
+
+/* 상세 페이지 레이아웃 (좌측 설명 + 우측 포스터) */
+.detail-container {
+  display: flex;
+  justify-content: center;  /* 중앙 정렬 */
+  align-items: flex-start;
+  gap: 60px;
+  max-width: 1000px;
+  margin: 40px auto 0;
+  flex-wrap: wrap;
+  padding: 0 20px;
+}
+
+.detail-left {
+  flex: 2;
+  min-width: 500px;
+}
+
+.detail-right {
+  flex: 0 0 350px;
+}
+
+.detail-right img {
+  width: 350px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: none;
+  background: none;
+}
+
+/* 제목 */
+#movie-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #ffcc00;
+}
+
+/* 태그들 */
+#movie-tags {
+  margin-bottom: 14px;
+}
+
+#movie-tags span {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* 버튼들 */
+.movie-buttons {
+  margin: 20px 0;
+}
+
+.movie-buttons button {
+  background: white;
+  color: black;
+  border: none;
+  padding: 10px 16px;
+  margin-right: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.movie-buttons button:hover {
+  background: #ddd;
+}
+
+/* 정보 텍스트 */
+.detail-left p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* 추천 영화 가로 슬라이드용 */
+.scroll-row {
+display: flex;
+overflow-x: auto;
+gap: 20px;
+padding: 10px 0;
+scroll-behavior: smooth;
+}
+
+.scroll-row::-webkit-scrollbar {
+display: none;
+}
+.scroll-row {
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+
+/* 카드 */
+.movie-card {
+flex: 0 0 auto;
+width: 150px;
+text-align: center;
+}
+
+.movie-card img {
+width: 100%;
+border-radius: 10px;
+}
+
+.movie-card p {
+margin-top: 8px;
+color: white;
+font-size: 14px;
+}
