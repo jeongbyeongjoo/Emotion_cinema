@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>영화 상세 정보</title>
+  <link rel="stylesheet" href="detail.css">
+</head>
+<body>
+  <header class="header">
+    <div class="left-group">
+      <a href="../index.html">
+        <img src="../images/logo.png" alt="Logo" class="emotion_cinema-logo">
+      </a>
+    </div>
+  </header>
+
+  <main class="detail-container">
+    <div class="detail-left">
+      <h1 id="movie-title"></h1>
+
+      <div id="movie-tags"></div>
+
+      <div class="movie-buttons">
+        <button>▶ 시청하기</button>
+        <button>＋ 찜</button>
+        <button>⤴ 공유</button>
+      </div>
+
+      <p><strong>장르:</strong> <span id="movie-genres"></span></p>
+      <p><strong>평점:</strong> <span id="movie-vote"></span></p>
+      <p><strong>개요:</strong></p>
+      <p id="movie-overview"></p>
+      <p><strong>개봉일:</strong> <span id="movie-date"></span></p>
+    </div>
+
+    <div class="detail-right">
+      <img id="movie-poster" src="" alt="포스터">
+    </div>
+  </main>
+
+  <script src="detail.js"></script>
+</body>
+</html>
