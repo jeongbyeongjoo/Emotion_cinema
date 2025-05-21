@@ -1,48 +1,142 @@
-/* 전체 배경 및 기본 텍스트 스타일 */
+/*페이지 전체 설정*/
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+
 body {
   background: radial-gradient(ellipse at center, #1c3c4c 0%, #121212 100%);
   color: white;
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 40px;
 }
 
+html, body {
+  height: 100%;
+  font-family: "Noto Sans KR", sans-serif;
+  background: black;
+  color: white;
+  overflow-x: hidden;
+}
+
+/*로고, 메뉴, 서치박스, 프로필*/
 .header {
   display: flex;
-  justify-content: flex-start;
-  padding: 20px 40px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
 }
 
-.close-link {
-  font-size: 32px;
+#logo img{
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+}
+
+#profile img{
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 100px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: #111;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 12px;
+    width: 300px;
+    position: relative;
+    margin: 100px auto;
+  }
+
+.search-box i {
   color: white;
-  text-decoration: none;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.search-box input {
   background: transparent;
-  cursor: pointer;
-  transition: color 0.2s;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 16px;
+  flex: 1;
 }
 
-.close-link:hover {
-  color: #ff6666;
+.profile-btn{
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
+.left-group {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  height: 100px;
+}
 
+main {
+  flex: 1;
+}
 
-/* 상세 페이지 레이아웃 (좌측 설명 + 우측 포스터) */
+.menu {
+  display: flex;
+  gap: 36px;
+  font-size: 20px;
+  font-weight: 200;
+}
+
+.menu li {
+  list-style: none;
+}
+
+.emotion_cinema-logo {
+  padding-left: 20px;
+  padding-top: 10px;
+  height: 80px
+}
+.user-icon {
+  padding-right: 20px;
+  height: 40px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* 영화 정보 레이아웃 (좌측 설명 + 우측 포스터) */
 .detail-container {
   display: flex;
-  justify-content: center;  /* 중앙 정렬 */
+  justify-content: center;
   align-items: flex-start;
   gap: 60px;
-  max-width: 1000px;
+  max-width: 1500px;
   margin: 40px auto 0;
   flex-wrap: wrap;
   padding: 0 20px;
+  padding-top: 20px;
+  padding-bottom: 100px;
 }
 
 .detail-left {
   flex: 2;
-  min-width: 500px;
+  min-width: 400px;
 }
 
 .detail-right {
@@ -65,9 +159,9 @@ body {
   color: #ffcc00;
 }
 
-/* 태그들 */
+/* 태그들(장르) */
 #movie-tags {
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 #movie-tags span {
@@ -79,7 +173,7 @@ body {
   font-size: 14px;
 }
 
-/* 버튼들 */
+/* 버튼들(시청하기, 찜, 공유) */
 .movie-buttons {
   margin: 20px 0;
 }
@@ -141,4 +235,42 @@ border-radius: 10px;
 margin-top: 8px;
 color: white;
 font-size: 14px;
+}
+
+h2 {
+  padding-left: 110px;
+}
+
+#recommended-list {
+  padding-left: 110px;
+  padding-right: 110px;
+}
+
+.similar-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0 20px;
+  margin: 30px 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.similar-container::-webkit-scrollbar {
+  display: none;
+}
+
+.similar-list {
+  display: flex;
+  gap: 16px;
+}
+
+.similar-list img {
+  flex: 0 0 auto;
+  width: 160px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
+}
+.similar-list img:hover {
+  transform: scale(1.05);
 }
