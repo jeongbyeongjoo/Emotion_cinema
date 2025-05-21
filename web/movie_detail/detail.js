@@ -8,6 +8,15 @@ const GENRE_MAP = {
   10752: "War", 37: "Western"
 };
 
+// 🎲 배열 셔플 함수
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 // 1. 쿼리스트링에서 영화 ID 가져오기
 const params = new URLSearchParams(window.location.search);
 const movieId = parseInt(params.get("id"));
@@ -27,9 +36,10 @@ fetch('../json/all_movies.json')
       return;
     }
 
+    // 2-1. 장르 텍스트 배열로 변환
     const genres = movie.genre_ids.map(id => GENRE_MAP[id]).filter(Boolean);
 
-    // 요소 채우기
+    // 2-2. 상세 정보 채우기
     document.getElementById('movie-title').textContent = movie.title;
     document.getElementById('movie-poster').src = IMAGE_BASE + movie.poster_path;
     document.getElementById('movie-poster').alt = movie.title;
@@ -38,12 +48,35 @@ fetch('../json/all_movies.json')
     document.getElementById('movie-date').textContent = movie.release_date;
     document.getElementById('movie-genres').textContent = genres.join(', ');
 
-    // 태그 span으로 출력
     const tagBox = document.getElementById('movie-tags');
     genres.forEach(g => {
       const span = document.createElement('span');
       span.textContent = g;
       tagBox.appendChild(span);
+    });
+
+    // 3. 🎯 비슷한 장르 영화 추천
+    const recommendedRaw = data.filter(m => {
+      if (m.id === movie.id) return false; // 자기 자신 제외
+      if (!m.genre_ids) return false;
+      return m.genre_ids.some(gid => movie.genre_ids.includes(gid));
+    });
+
+    const recommended = shuffleArray(recommendedRaw).slice(0, 20); // 랜덤 10개
+
+    const recBox = document.getElementById('recommended-list');
+    recBox.classList.add('scroll-row'); // 가로 스크롤 스타일 클래스 적용
+
+    recommended.forEach(rec => {
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.innerHTML = `
+        <a href="detail.html?id=${rec.id}">
+          <img src="${IMAGE_BASE + rec.poster_path}" alt="${rec.title}">
+          <p>${rec.title}</p>
+        </a>
+      `;
+      recBox.appendChild(card);
     });
   })
   .catch(err => {
