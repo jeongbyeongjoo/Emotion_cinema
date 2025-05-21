@@ -1,4 +1,3 @@
-
 /* 공통 초기화 */
 * {
     margin: 0;
@@ -400,23 +399,185 @@ h1 {
   .movie-grid {
     display: flex;
     overflow-x: auto;
-    gap: 16px;
+    gap: 20px;
+        padding: 20px;
     scroll-behavior: smooth;
-    padding-bottom: 10px;
-    padding-left: 10px;
-  }
-  
-  .movie-card {
+    cursor: grab;
+    }
+    
+    .movie-card {
+        flex: 0 0 auto;
+        width: 200px;
+        text-decoration: none;
+        color: white;
+        transition: transform 0.3s ease;
+    }
+    
+    .movie-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .movie-info {
+        padding: 10px 0;
+    }
+    
+    .movie-title {
+        font-size: 14px;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .movie-score {
+        margin: 4px 0 0 0;
+        font-size: 13px;
+        color: #ffd700;
+    }
+    
+    #drama-top {
+        padding: 20px;
+        margin: 0 auto;
+        max-width: 1500px;
+    }
+    
+    #drama-container {
+        padding: 20px;
+        margin: 0 auto;
+        max-width: 1500px;
+    }
+    
+    #drama-container .genre-section {
+        margin-bottom: 40px;
+    }
+    
+    #drama-container .genre-title {
+        font-size: 24px;
+        color: white;
+        margin: 20px 0;
+        padding-left: 20px;
+    }
+    
+    #drama-container .movie-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 20px;
+        padding: 20px;
+        scroll-behavior: smooth;
+    }
+    
+    #drama-container .movie-card {
+        flex: 0 0 auto;
+        width: 200px;
+        text-decoration: none;
+        color: white;
+        transition: transform 0.3s ease;
+    }
+    
+    #drama-container .movie-card:hover {
+        transform: scale(1.05);
+    }
+    
+    #drama-container .movie-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    #drama-container .movie-info {
+        padding: 10px 0;
+    }
+    
+    #drama-container .movie-title {
+        font-size: 14px;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* 스크롤바 스타일링 */
+    #drama-container .movie-grid::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    #drama-container .movie-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    
+    #drama-container .movie-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+    }
+    
+    #drama-container .movie-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* 드래그 스타일 */
+    #drama-container .movie-grid.dragging {
+        cursor: grabbing;
+        scroll-behavior: auto;
+    }
+    
+    #drama-container .movie-grid {
+        cursor: grab;
+    }
+    
+    .movie-grid.dragging {
+        cursor: grabbing;
+        scroll-behavior: auto;
+    }
+    
+    .movie-grid::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    .movie-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    
+    .movie-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+    }
+    
+    .movie-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .movie-card {
     flex: 0 0 auto;
-    width: 140px;
-    text-align: center;
+    width: 200px;
     text-decoration: none;
-    color: inherit;
-  }
-  
-  .movie-card img {
+    color: white;
+        transition: transform 0.3s ease;
+    }
+    
+    .movie-card:hover {
+        transform: scale(1.05);
+    }
+    
+    .movie-card img {
     width: 100%;
+    height: 300px;
+        object-fit: cover;
     border-radius: 8px;
-    pointer-events: none; /* 이미지 위에서 드래그 가능하게 */
-  }
-  
+}
+
+.movie-info {
+    padding: 10px 0;
+}
+.movie-title {
+    font-size: 14px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
