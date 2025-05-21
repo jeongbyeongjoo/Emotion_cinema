@@ -3,6 +3,7 @@
 // 
 // 1. json파일 불러 배열에 저장하기
 // 2. 자동완성하고 영화 제목들을 HTML에 출력하기
+// 3. 엔터 누르면 상세 페이지로 이동하기
 
 let suggestions = [] // 전역변수로 영화 이름을 저장하는 배열 선언
 // 1.
@@ -12,7 +13,7 @@ fetch('json/all_movies.json') // 비동기식, 데이터 파일 읽어옴
     return response.json(); // 다음 .then으로 값 리턴
   })
   .then(movies => { // 영화 정보 객체를 담은 배열 가져옴
-    suggestions = movies.map(x => x.title).sort() // top.json의 배열안에 있는 객체의 title만 모두 따와서 오름차순으로 정렬하고 전역변수에 담기
+    suggestions = suggestions.concat(movies.map(x => x.title));
     //console.log(suggestions);
   })
   .catch(err => { // 오류 발생 시
@@ -25,7 +26,7 @@ fetch('json/all_tv_shows.json')  // 드라마 tv 쇼도 같이 열기
     return response.json(); 
   })
   .then(tv => {
-    suggestions = suggestions.concat(tv.map(x => x.name)).sort();
+    suggestions = suggestions.concat(tv.map(x => x.name));
   })
   .catch(err => {
     console.error('에러 발생:', err);
@@ -41,7 +42,7 @@ searchInput.addEventListener('input', () => {
 
   const filtered = suggestions.filter(item => item.toLowerCase().includes(input)); 
   //suggestions에서 filter(조건)를 만족하는 새배열을 만듬 -> filtered / 요소를 소문자로 바꾸고 입력값이 포함되어 있는 문자열이면 반환
-  filtered.forEach(item => { // filtered 배열에 모든 문자열에 대해 -> 자동완성된 영화 제목들
+  filtered.forEach(item => { // filtered 배열에 모든 문자열에 대해 -> 자동완성된 영화 제목들f
     const li = document.createElement('li'); //li 태그 생성
     li.textContent = item; //li 안의 내용은 item 문자열로 채움
     li.addEventListener('click', () => { // 자동완성된 제목을 누른 경우
@@ -51,3 +52,33 @@ searchInput.addEventListener('input', () => {
     suggestionList.appendChild(li); // ul 태그의 자식 노드로 자동완성을 집어 넣음! 끝!
   });
 });
+
+// 3. 엔터 누르면 상세 페이지로 이동하기
+searchInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      goToUrl();
+    }
+});
+
+function goToUrl() {
+ fetch('json/all_movies.json')
+  .then(response => { 
+    if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+    return response.json();
+  })
+  .then(movies => { 
+    obj = movies.find(movie => movie.title === searchInput.value);
+    //console.log(.id);
+    if(obj === undefined){  
+      alert("영화가 없습니다.");
+    }
+    else{
+      url = `movie_detail/detail.html?id=${obj.id}`
+      // window.location.href = url;
+      window.open(url);
+    }
+  })
+  .catch(err => { // 오류 발생 시
+    console.error('에러 발생:', err);
+  });
+}

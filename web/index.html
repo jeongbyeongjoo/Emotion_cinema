@@ -74,14 +74,19 @@
     </ul>
   </div>
 
-  <div id="top">
+  <section>
     <h1>오늘의 영화 TOP10</h1>
-    <script src="top/movie-top.js"></script>
-  </div>
-  <div>
-    <div id="movie-container"></div>
-    <div id="drama-container"></div>
-  </div>
+    <div id="movie-top10" class="top10-container"></div>
+  </section>
+
+  <section>
+    <h1>오늘의 드라마 TOP10</h1>
+    <div id="drama-top10" class="top10-container"></div>
+  </section>
+  
+  <section>
+    <div id="genre-section"></div>
+  </section>
 </main>
 
 <div class="footer">
@@ -95,6 +100,8 @@
 </div>
 
 </body>
+<script src="js/top.js"></script>
+<script src="js/genre.js"></script>
 <script src="js/app.js"></script>
 <script src="js/searchMovie.js"></script>
 <script src="js/genre.js"></script>

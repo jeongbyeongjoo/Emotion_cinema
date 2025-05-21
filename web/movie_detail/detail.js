@@ -1,3 +1,5 @@
+//영화 상세 정보 출력 및 비슷한 컨텐츠 추천
+
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
 
 const GENRE_MAP = {
