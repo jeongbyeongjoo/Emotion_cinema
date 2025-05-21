@@ -1,4 +1,4 @@
-const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
+const IMAGE_BASE_GENRE = 'https://image.tmdb.org/t/p/w500';
 
 const GENRE_MAP = {
   28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime",
@@ -20,7 +20,7 @@ function shuffleArray(array) {
 fetch('json/all_movies.json')
   .then(res => res.json())
   .then(data => {
-    const container = document.getElementById('movie-container');
+    const container = document.getElementById('genre-section');
     const genreMap = {};
 
     // 각 장르에 해당하는 영화 모으기
@@ -56,7 +56,7 @@ fetch('json/all_movies.json')
         card.className = 'movie-card';
         card.href = `movie_detail/detail.html?id=${movie.id}`;
         card.innerHTML = `
-          <img src="${IMAGE_BASE + movie.poster_path}" alt="${movie.title}">
+          <img src="${IMAGE_BASE_GENRE + movie.poster_path}" alt="${movie.title}">
           <p>${movie.title}</p>
         `;
         grid.appendChild(card);
