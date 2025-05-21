@@ -7,30 +7,35 @@
 
 let suggestions = [] // 전역변수로 영화 이름을 저장하는 배열 선언
 // 1.
-fetch('json/all_movies.json') // 비동기식, 데이터 파일 읽어옴
-  .then(response => { // 작업 성공시 실행
-    if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
-    return response.json(); // 다음 .then으로 값 리턴
-  })
-  .then(movies => { // 영화 정보 객체를 담은 배열 가져옴
-    suggestions = suggestions.concat(movies.map(x => x.title));
-    //console.log(suggestions);
-  })
-  .catch(err => { // 오류 발생 시
-    console.error('에러 발생:', err);
-  });
+const jsonPath = window.location.pathname.includes('/movie_detail/')
+    ? '../json/'
+    : 'json/';
 
-fetch('json/all_tv_shows.json')  // 드라마 tv 쇼도 같이 열기
-  .then(response => {
-    if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
-    return response.json(); 
-  })
-  .then(tv => {
-    suggestions = suggestions.concat(tv.map(x => x.name));
-  })
-  .catch(err => {
-    console.error('에러 발생:', err);
-  });
+// 영화 데이터 로드
+fetch(jsonPath + 'all_movies.json')
+    .then(response => {
+        if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+        return response.json();
+    })
+    .then(movies => {
+        suggestions = suggestions.concat(movies.map(x => x.title));
+    })
+    .catch(err => {
+        console.error('에러 발생:', err);
+    });
+
+// TV 시리즈 데이터 로드
+fetch(jsonPath + 'dramas_top10.json')  // all_tv_shows.json을 dramas_top10.json으로 변경
+    .then(response => {
+        if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+        return response.json();
+    })
+    .then(tv => {
+        suggestions = suggestions.concat(tv.map(x => x.title || x.name));
+    })
+    .catch(err => {
+        console.error('에러 발생:', err);
+    });
 
 // 2.
 const searchInput = document.getElementById('searchInput');
@@ -61,24 +66,41 @@ searchInput.addEventListener('keypress', function(event) {
 });
 
 function goToUrl() {
- fetch('json/all_movies.json')
-  .then(response => { 
-    if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
-    return response.json();
-  })
-  .then(movies => { 
-    obj = movies.find(movie => movie.title === searchInput.value);
-    //console.log(.id);
-    if(obj === undefined){  
-      alert("영화가 없습니다.");
-    }
-    else{
-      url = `movie_detail/detail.html?id=${obj.id}`
-      // window.location.href = url;
-      window.open(url);
-    }
-  })
-  .catch(err => { // 오류 발생 시
-    console.error('에러 발생:', err);
-  });
+    const jsonPath = window.location.pathname.includes('/movie_detail/')
+        ? '../json/'
+        : 'json/';
+
+    // 먼저 영화 검색
+    fetch(jsonPath + 'all_movies.json')
+        .then(response => {
+            if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+            return response.json();
+        })
+        .then(movies => {
+            let obj = movies.find(movie => movie.title === searchInput.value);
+            if (obj) {
+                const url = `movie_detail/detail.html?id=${obj.id}`;
+                window.open(url);
+                return;
+            }
+
+            // 영화에서 찾지 못한 경우 TV 시리즈에서 검색
+            return fetch(jsonPath + 'dramas_top10.json');
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+            return response.json();
+        })
+        .then(dramas => {
+            let obj = dramas.find(drama => (drama.title || drama.name) === searchInput.value);
+            if (obj) {
+                const url = `movie_detail/detail.html?id=${obj.id}&type=tv`;
+                window.open(url);
+            } else {
+                alert("컨텐츠를 찾을 수 없습니다.");
+            }
+        })
+        .catch(err => {
+            console.error('에러 발생:', err);
+        });
 }

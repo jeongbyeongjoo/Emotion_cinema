@@ -647,3 +647,34 @@ h1 {
     text-overflow: ellipsis;
     width: 100%;
   }
+#genre-section,
+#drama-genre-section {
+    margin: 0 40px;
+    /* 좌우 여백 40px 추가 */
+}
+
+.genre-title {
+    border-bottom: none !important;
+    /* 제목 밑의 선 제거 */
+    margin-bottom: 20px;
+    /* 제목과 콘텐츠 사이 간격 */
+}
+
+.genre-section {
+    margin-bottom: 40px;
+    /* 섹션 간 간격 */
+}
+
+.genre-container {
+    margin: 0 40px;
+}
+
+.genre-section {
+    margin-bottom: 40px;
+}
+
+.genre-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: none;
+}
