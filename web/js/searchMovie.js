@@ -5,9 +5,8 @@
 // 2. 자동완성하고 영화 제목들을 HTML에 출력하기
 
 let suggestions = [] // 전역변수로 영화 이름을 저장하는 배열 선언
-
 // 1.
-fetch('json/top.json') // 비동기식, 데이터 파일 읽어옴
+fetch('json/all_movies.json') // 비동기식, 데이터 파일 읽어옴
   .then(response => { // 작업 성공시 실행
     if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
     return response.json(); // 다음 .then으로 값 리턴
@@ -17,6 +16,18 @@ fetch('json/top.json') // 비동기식, 데이터 파일 읽어옴
     //console.log(suggestions);
   })
   .catch(err => { // 오류 발생 시
+    console.error('에러 발생:', err);
+  });
+
+fetch('json/all_tv_shows.json')  // 드라마 tv 쇼도 같이 열기
+  .then(response => {
+    if (!response.ok) throw new Error('JSON 파일을 불러오지 못했습니다.');
+    return response.json(); 
+  })
+  .then(tv => {
+    suggestions = suggestions.concat(tv.map(x => x.name)).sort();
+  })
+  .catch(err => {
     console.error('에러 발생:', err);
   });
 

@@ -1,2 +1,0 @@
-cosine_sim.pickle filter=lfs diff=lfs merge=lfs -text
-movies.pickle filter=lfs diff=lfs merge=lfs -text
