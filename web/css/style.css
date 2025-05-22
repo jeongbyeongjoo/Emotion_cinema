@@ -386,12 +386,12 @@ h1 {
   }
   
   .genre-section {
-    margin-bottom: 40px;
+    margin-top: 40px;
   }
   
   .genre-title {
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 0px !important;
     border-bottom: 2px solid #555;
     padding-bottom: 5px;
     padding-left: 10px;
@@ -401,8 +401,9 @@ h1 {
   .movie-grid {
     display: flex;
     overflow-x: auto;
-    gap: 20px;
-        padding: 20px;
+    gap: 12px;
+        margin-top: 0;
+        padding: 10px;
     scroll-behavior: smooth;
     cursor: grab;
     }
@@ -536,24 +537,6 @@ h1 {
         scroll-behavior: auto;
     }
     
-    .movie-grid::-webkit-scrollbar {
-        height: 8px;
-    }
-    
-    .movie-grid::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-    }
-    
-    .movie-grid::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 4px;
-    }
-    
-    .movie-grid::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.5);
-    }
-    
         .movie-card {
     padding-bottom: 10px;
   }
@@ -677,4 +660,56 @@ h1 {
     font-size: 24px;
     margin-bottom: 20px;
     border-bottom: none;
+}
+/* 장르별 영화 리스트 스크롤바 숨기기 */
+/*
+.movie-grid::-webkit-scrollbar {
+    display: none;
+}
+.movie-grid {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+*/
+/* 장르별 영화 리스트 좌우 버튼 스타일 */
+.genre-section-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.genre-left,
+.genre-right {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 2;
+}
+
+.genre-left:hover,
+.genre-right:hover {
+    background: #444;
+}
+
+.genre-container {
+    flex: 1;
+}
+
+/* .movie-grid 스크롤바 모양만 숨김 (동작은 그대로) */
+.movie-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.movie-grid {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }

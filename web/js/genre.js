@@ -21,6 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     loadMoviesByGenre(container);
+
+    // 좌우 스크롤 버튼 기능 추가
+    setTimeout(() => {
+        document.querySelectorAll('.genre-section-wrapper').forEach(wrapper => {
+            const leftBtn = wrapper.querySelector('.genre-left');
+            const rightBtn = wrapper.querySelector('.genre-right');
+            const grid = wrapper.querySelector('.movie-grid');
+            if (leftBtn && grid) {
+                leftBtn.onclick = () => { grid.scrollBy({ left: -400, behavior: 'smooth' }); };
+            }
+            if (rightBtn && grid) {
+                rightBtn.onclick = () => { grid.scrollBy({ left: 400, behavior: 'smooth' }); };
+            }
+        });
+    }, 500);
 });
 
 function loadMoviesByGenre(container) {
@@ -71,7 +86,7 @@ function loadMoviesByGenre(container) {
                     card.href = `movie_detail/detail.html?id=${movie.id}&type=movie`;
                     card.innerHTML = `
                         <img src="${IMAGE_BASE_GENRE + movie.poster_path}" alt="${movie.title}">
-                        <p>${index + 1}. ${movie.title}</p>
+                        <!-- <p>${index + 1}. ${movie.title}</p> -->
                     `;
                     grid.appendChild(card);
                 });
