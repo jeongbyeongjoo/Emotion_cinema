@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="detail.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600&display=swap" rel="stylesheet">
+<link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+<title>컨텐츠 상세 정보</title>
+</head>
+<body>
+  <header class="header">
+    <div class="left-group">
+      <a href="../index.html">
+        <img src="../images/logo.png" alt="Logo" class="emotion_cinema-logo">
+      </a>
+      <ul class="menu">
+        <li>시리즈</li>
+        <li>영화</li>
+        <li>라이브</li>
+        <li>파라마운트 +</li>
+      </ul>
+      <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+          <ul id="suggestions"></ul>
+      </div> 
+    </div>
+    <img src="../images/profile.png" alt="Profile Image" class="user-icon">
+  </header>
+
+  <main class="detail-container">
+    <div class="detail-left">
+      <h1 id="movie-title"></h1>
+      <div id="movie-tags"></div>
+
+      <div class="movie-buttons">
+        <button>▶ 시청하기</button>
+        <button>＋ 찜</button>
+        <button>⤴ 공유</button>
+      </div>
+
+      <p><strong>장르:</strong> <span id="movie-genres"></span></p>
+      <p><strong>평점:</strong> <span id="movie-vote"></span></p>
+      <p><strong>개요:</strong></p>
+      <p id="movie-overview"></p>
+      <p><strong>개봉일:</strong> <span id="movie-date"></span></p>
+    </div>
+
+    <div class="detail-right">
+      <img id="movie-poster" src="" alt="포스터">
+    </div>
+  </main>
+  <h2>비슷한 컨텐츠</h2>
+  <div id="recommended-list" class="similar-list"></div>
+
+</body>
+<script src="detail.js"></script>
+<script src="../js/searchMovie.js"></script>
+</html>

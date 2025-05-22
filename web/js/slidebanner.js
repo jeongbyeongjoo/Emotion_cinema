@@ -1,4 +1,4 @@
-let slideIndex = 0;
+let slideIndex = 1;
 const slides = document.querySelector('.slides');
 const dots = document.querySelectorAll('.dot');
 

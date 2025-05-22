@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <title>Emotion_cinema</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="left-group">
+            <img src="images/logo.png" alt="Logo" class="emotion_cinema-logo">
+            <ul class="menu">
+                <li>시리즈</li>
+                <li>영화</li>
+                <li>라이브</li>
+                <li>파라마운트 +</li>
+            </ul>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+                <ul id="suggestions"></ul>
+            </div>
+        </div>
+        <img src="images/profile.png" alt="Profile Image" class="user-icon">
+    </header>
+
+    <main>
+        <section id="Banner">
+            <ul id="BannerList">
+                <li class="banner"><img src="./images/마에Banner.png" alt="마에" id="BS1"></li>
+                <li class="banner"><img src="./images/이재Banner.png" alt="이재" id="BS2"></li>
+                <li class="banner"><img src="./images/환연Banner.png" alt="환연" id="BS3"></li>
+            </ul>
+        </section>
+
+        <div id="Banner_button">
+            <ul>
+                <li onclick="bs(3)" class="BB"></li>
+                <li onclick="bs(2)" class="BB"></li>
+                <li onclick="bs(1)" class="BB"></li>
+            </ul>
+        </div>
+
+        <div class="channel-wrapper">
+            <img src="./images/LeftSwipeChannel.svg" alt="Left Button" id="left_button" onclick="cs(1)">
+            <section id="Channel">
+                <ul id="ChannelList">
+                    <li><img src="./images/holidays.png" alt="" class="channels"></li>
+                    <li><img src="./images/kids.png" alt="" class="channels"></li>
+                    <li><img src="./images/bundesliga.png" alt="" class="channels"></li>
+                    <li><img src="./images/ufc.png" alt="" class="channels"></li>
+                    <li><img src="./images/afc.png" alt="" class="channels"></li>
+                    <li><img src="./images/kbo.png" alt="" class="channels"></li>
+                    <li><img src="./images/tennis.png" alt="" class="channels"></li>
+                </ul>
+            </section>
+
+            <img src="./images/RightSwipeChannel.svg" alt="Right Button" id="right_button" onclick="cs(2)">
+        </div>
+
+        <div id="Channel_button">
+            <ul>
+                <li onclick="cs(1)" class="CB"></li>
+                <li onclick="cs(2)" class="CB"></li>
+            </ul>
+        </div>
+
+        <section>
+            <h1>오늘의 영화 TOP10</h1>
+            <div id="movie-top10" class="top10-container"></div>
+        </section>
+
+        <section>
+            <h1>오늘의 시리즈 TOP10</h1>
+            <div id="drama-top10" class="top10-container"></div>
+        </section>
+
+        <section>
+            <div id="genre-section" class="genre-container"></div>
+        </section>
+
+        <section>
+            <div id="drama-genre-section" class="genre-container"></div>
+        </section>
+    </main>
+
+    <div class="footer">
+        <div>WEB</div>
+        <div>
+            UNIV. 한국외국어대학교 글로벌캠퍼스<br>
+            Addr. 경기 용인시 처인구 모현읍 외대로 81<br>
+            Tel. 010-0000-0000 <br>
+            Copyright 2025 EMOTION CINEMA. All rights reserved.
+        </div>
+    </div>
+
+</body>
+<script src="js/top.js"></script>
+<script src="js/genre.js"></script>
+<script src="js/app.js"></script>
+<script src="js/searchMovie.js"></script>
+<script src="js/drama_genre.js"></script>
+
+</html>
