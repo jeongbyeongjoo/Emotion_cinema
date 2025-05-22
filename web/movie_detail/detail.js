@@ -35,8 +35,12 @@ const dataPath = '../json/all_contents.json';
 fetch(dataPath)
     .then(res => res.json())
     .then(data => {
+        console.log('전체 데이터 로드 완료:', data.length, '개의 항목');
+
         // id와 type이 모두 일치하는 항목 찾기
         const item = data.find(m => m.id === movieId && m.type === type);
+        console.log('현재 콘텐츠:', item);
+
         if (!item) {
             document.body.innerHTML = '<p style="color:white; text-align:center;">컨텐츠를 찾을 수 없습니다.</p>';
             return;
@@ -44,6 +48,8 @@ fetch(dataPath)
 
         // 2-1. 장르 텍스트 배열로 변환
         const genres = (item.genre_ids || []).map(id => GENRE_MAP[id]).filter(Boolean);
+        console.log('현재 콘텐츠 장르 IDs:', item.genre_ids);
+        console.log('현재 콘텐츠 장르 명칭:', genres);
 
         // 2-2. 상세 정보 채우기
         document.getElementById('movie-title').textContent = item.title || item.name;
@@ -63,13 +69,34 @@ fetch(dataPath)
         });
 
         // 3. 🎯 비슷한 장르 컨텐츠 추천
+        console.log('비슷한 콘텐츠 찾기 시작...');
+
+        // 장르 ID가 없는 항목 확인
+        const noGenreItems = data.filter(m => !m.genre_ids || m.genre_ids.length === 0);
+        console.log('장르 ID가 없는 항목 수:', noGenreItems.length);
+
+        // 현재 아이템의 genre_ids 확인
+        if (!item.genre_ids || item.genre_ids.length === 0) {
+            console.log('⚠️ 현재 콘텐츠에 장르 ID가 없어 비슷한 콘텐츠를 찾을 수 없습니다!');
+        }
+
         const recommendedRaw = data.filter(m => {
             if ((m.title === item.title) || (m.name === item.name)) return false; // 자기 자신 제외
             if (!m.genre_ids) return false;
-            return m.genre_ids.some(gid => (item.genre_ids || []).includes(gid));
+
+            // 장르 매칭 확인 (디버깅)
+            const hasMatchingGenre = m.genre_ids.some(gid => (item.genre_ids || []).includes(gid));
+
+            return hasMatchingGenre;
         });
 
+        console.log('필터링된 비슷한 콘텐츠 수:', recommendedRaw.length);
+        if (recommendedRaw.length === 0) {
+            console.log('⚠️ 비슷한 장르의 콘텐츠를 찾지 못했습니다!');
+        }
+
         const recommended = shuffleArray(recommendedRaw).slice(0, 20); // 랜덤 20개
+        console.log('최종 표시될 비슷한 콘텐츠 수:', recommended.length);
 
         const recBox = document.getElementById('recommended-list');
         recBox.classList.add('scroll-row'); // 가로 스크롤 스타일 클래스 적용
