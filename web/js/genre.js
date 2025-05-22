@@ -62,12 +62,13 @@ function loadMoviesByGenre(container) {
             });
 
             // 장르별 섹션 만들기
-            Object.entries(genreMap).forEach(([genre, movies]) => {
+            Object.entries(genreMap).forEach(([genre, moviesFromMap], idx) => {
                 // 인기도순으로 정렬하고 상위 20개 선택
-                const selectedMovies = movies
+                const selectedMovies = moviesFromMap
                     .sort((a, b) => b.popularity - a.popularity)
                     .slice(0, 20);
 
+                // Swiper 컨테이너 생성
                 const section = document.createElement('div');
                 section.className = 'genre-section';
 
@@ -76,25 +77,50 @@ function loadMoviesByGenre(container) {
                 title.textContent = `${genre} 영화`;
                 section.appendChild(title);
 
-                const grid = document.createElement('div');
-                grid.className = 'movie-grid';
+                // Swiper 구조
+                const swiperContainer = document.createElement('div');
+                swiperContainer.className = `swiper genre-swiper genre-swiper-${idx}`;
 
-                // 정렬된 영화 리스트 출력
+                const swiperWrapper = document.createElement('div');
+                swiperWrapper.className = 'swiper-wrapper';
+
                 selectedMovies.forEach((movie, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
                     const card = document.createElement('a');
                     card.className = 'movie-card';
                     card.href = `movie_detail/detail.html?id=${movie.id}&type=movie`;
-                    card.innerHTML = `
-                        <img src="${IMAGE_BASE_GENRE + movie.poster_path}" alt="${movie.title}">
-                        <!-- <p>${index + 1}. ${movie.title}</p> -->
-                    `;
-                    grid.appendChild(card);
+                    card.innerHTML = `<img src="${IMAGE_BASE_GENRE + movie.poster_path}" alt="${movie.title}">`;
+                    slide.appendChild(card);
+                    swiperWrapper.appendChild(slide);
                 });
 
-                section.appendChild(grid);
+                // 네비게이션 버튼
+                const prevBtn = document.createElement('div');
+                prevBtn.className = 'swiper-button-prev';
+                const nextBtn = document.createElement('div');
+                nextBtn.className = 'swiper-button-next';
+
+                swiperContainer.appendChild(swiperWrapper);
+                swiperContainer.appendChild(prevBtn);
+                swiperContainer.appendChild(nextBtn);
+
+                section.appendChild(swiperContainer);
                 container.appendChild(section);
 
-                enableDragScroll(grid);
+                // Swiper 인스턴스 생성 (각 섹션별로)
+                setTimeout(() => {
+                    new Swiper(`.genre-swiper-${idx}`, {
+                        slidesPerView: 6,
+                        slidesPerGroup: 6,
+                        spaceBetween: 20,
+                        navigation: {
+                            nextEl: `.genre-swiper-${idx} .swiper-button-next`,
+                            prevEl: `.genre-swiper-${idx} .swiper-button-prev`,
+                        },
+                        loop: false,
+                    });
+                }, 0);
             });
         })
         .catch(err => {
@@ -134,83 +160,3 @@ function enableDragScroll(element) {
         element.scrollLeft = scrollLeft - walk;
     });
 }
-
-fetch('./json/movies_top10.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        const container = document.getElementById('movie-container');
-        const genreMap = {};
-
-        // 각 장르별로 영화 분류
-        data.forEach(movie => {
-            if (!movie.genre_ids || !movie.poster_path || !movie.title) return;
-
-            const genres = movie.genre_ids.map(id => GENRE_MAP[id]).filter(Boolean);
-
-            genres.forEach(genre => {
-                if (!genreMap[genre]) {
-                    genreMap[genre] = [];
-                }
-                if (movie.score) {
-                    genreMap[genre].push(movie);
-                }
-            });
-        });
-
-        // 각 장르별로 평점순 정렬 및 상위 20개 선택
-        Object.keys(genreMap).forEach(genre => {
-            genreMap[genre].sort((a, b) => b.score - a.score);
-            genreMap[genre] = genreMap[genre].slice(0, 20);
-        });
-
-        // 장르별 섹션 생성
-        Object.entries(genreMap).forEach(([genre, movies]) => {
-            const section = document.createElement('div');
-            section.className = 'genre-section';
-
-            const title = document.createElement('h2');
-            title.className = 'genre-title';
-            title.textContent = `${genre} 영화`;
-            section.appendChild(title);
-
-            const grid = document.createElement('div');
-            grid.className = 'movie-grid';
-
-            // 영화 카드 생성
-            movies.forEach((movie, index) => {
-                const card = document.createElement('a');
-                card.className = 'movie-card';
-                card.href = `movie_detail/detail.html?id=${movie.id}&type=movie`;
-
-                const image = document.createElement('img');
-                image.src = IMAGE_BASE + movie.poster_path;
-                image.alt = movie.title;
-
-                const info = document.createElement('div');
-                info.className = 'movie-info';
-
-                const title = document.createElement('p');
-                title.className = 'movie-title';
-                title.textContent = `${index + 1}. ${movie.title}`;
-
-                info.appendChild(title);
-                card.appendChild(image);
-                card.appendChild(info);
-                grid.appendChild(card);
-            });
-
-            section.appendChild(grid);
-            container.appendChild(section);
-
-            // 드래그 스크롤 기능 추가
-            enableDragScroll(grid);
-        });
-    })
-    .catch(error => {
-        console.error('영화 데이터를 불러오는 중 오류 발생:', error);
-    });

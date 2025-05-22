@@ -51,8 +51,8 @@ fetch('./json/dramas_popularity.json')
         });
 
         // 장르별 섹션 생성
-        Object.entries(genreMap).forEach(([genre, dramas]) => {
-            if (dramas.length === 0) return;  // 드라마가 없는 장르는 건너뛰기
+        Object.entries(genreMap).forEach(([genre, dramas], idx) => {
+            if (dramas.length === 0) return;
 
             const section = document.createElement('div');
             section.className = 'genre-section';
@@ -62,37 +62,50 @@ fetch('./json/dramas_popularity.json')
             title.textContent = `${genre} 시리즈`;
             section.appendChild(title);
 
-            const grid = document.createElement('div');
-            grid.className = 'movie-grid';
+            // Swiper 구조
+            const swiperContainer = document.createElement('div');
+            swiperContainer.className = `swiper drama-genre-swiper drama-genre-swiper-${idx}`;
 
-            // 드라마 카드 생성
+            const swiperWrapper = document.createElement('div');
+            swiperWrapper.className = 'swiper-wrapper';
+
             dramas.forEach((drama, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
                 const card = document.createElement('a');
                 card.className = 'movie-card';
                 card.href = `movie_detail/detail.html?id=${drama.id}&type=tv`;
-
-                const image = document.createElement('img');
-                image.src = 'https://image.tmdb.org/t/p/w500' + drama.poster_path;
-                image.alt = drama.title || drama.name;
-
-                const info = document.createElement('div');
-                info.className = 'movie-info';
-
-                const title = document.createElement('p');
-                title.className = 'movie-title';
-                title.textContent = `${index + 1}. ${drama.title || drama.name}`;
-
-                info.appendChild(title);
-                card.appendChild(image);
-                card.appendChild(info);
-                grid.appendChild(card);
+                card.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${drama.poster_path}" alt="${drama.title || drama.name}">`;
+                slide.appendChild(card);
+                swiperWrapper.appendChild(slide);
             });
 
-            section.appendChild(grid);
+            // 네비게이션 버튼
+            const prevBtn = document.createElement('div');
+            prevBtn.className = 'swiper-button-prev';
+            const nextBtn = document.createElement('div');
+            nextBtn.className = 'swiper-button-next';
+
+            swiperContainer.appendChild(swiperWrapper);
+            swiperContainer.appendChild(prevBtn);
+            swiperContainer.appendChild(nextBtn);
+
+            section.appendChild(swiperContainer);
             container.appendChild(section);
 
-            // 드래그 스크롤 기능 추가
-            enableDragScroll(grid);
+            // Swiper 인스턴스 생성 (각 섹션별로)
+            setTimeout(() => {
+                new Swiper(`.drama-genre-swiper-${idx}`, {
+                    slidesPerView: 6,
+                    slidesPerGroup: 6,
+                    spaceBetween: 20,
+                    navigation: {
+                        nextEl: `.drama-genre-swiper-${idx} .swiper-button-next`,
+                        prevEl: `.drama-genre-swiper-${idx} .swiper-button-prev`,
+                    },
+                    loop: false,
+                });
+            }, 0);
         });
     })
     .catch(error => {

@@ -558,7 +558,8 @@ h1 {
     height: 300px;
         object-fit: cover;
     border-radius: 8px;
-    pointer-events: none; /* 이미지 위에서 드래그 가능하게 */
+    /* pointer-events: none; */
+        /* 이미지 클릭을 위해 주석 처리 또는 삭제 */
   }
 
   .poster-wrapper {
@@ -712,4 +713,36 @@ h1 {
 .movie-grid {
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+/* Swiper 네비게이션 화살표 기본 스타일 */
+.swiper-button-next,
+.swiper-button-prev {
+    --swiper-navigation-color: white;
+    --swiper-navigation-size: 40px;
+    opacity: 0;
+    /* 기본적으로 화살표 숨김 */
+    transition: opacity 0.3s ease;
+    /* 부드러운 효과 */
+}
+
+/* Swiper 컨테이너에 마우스 호버 시 화살표 보이도록 */
+.swiper:hover .swiper-button-next,
+.swiper:hover .swiper-button-prev {
+    opacity: 1;
+}
+
+/* 비활성화된 Swiper 화살표 숨기기 (처음/마지막 슬라이드) */
+.swiper-button-disabled {
+    opacity: 0 !important;
+    /* !important를 사용하여 확실히 숨김 */
+    pointer-events: none !important;
+    /* 클릭 이벤트도 막음 */
+}
+
+/* 영화 카드 호버 효과 (Swiper 내부) */
+.swiper-slide .movie-card:hover {
+    transform: scale(1.05);
+    /* 마우스 오버 시 약간 확대 */
+    transition: transform 0.2s ease-in-out;
+    /* 부드러운 전환 효과 */
 }
