@@ -121,64 +121,94 @@ async function loadContentData() {
             tagBox.appendChild(span);
         });
 
-        // 3. 🎯 비슷한 장르 컨텐츠 추천
-        console.log('비슷한 콘텐츠 찾기 시작...');
+        // 3. 🎯 AI 기반 비슷한 콘텐츠 추천
+        console.log('AI 기반 비슷한 콘텐츠 찾기 시작...');
 
-        // 현재 아이템의 genre_ids 확인
-        if (!item.genre_ids || item.genre_ids.length === 0) {
-            console.log('⚠️ 현재 콘텐츠에 장르 ID가 없어 비슷한 콘텐츠를 찾을 수 없습니다!');
-            document.getElementById('recommended-list').innerHTML = '<p>비슷한 콘텐츠를 찾을 수 없습니다.</p>';
-            return;
-        }
-
-        const recommendedRaw = allData.filter(m => {
-            if (m.id === item.id && m.type === item.type) return false; // 자기 자신 제외
-            if (!m.genre_ids || m.genre_ids.length === 0) return false;
-
-            // 장르 매칭 확인
-            const hasMatchingGenre = m.genre_ids.some(gid => (item.genre_ids || []).includes(gid));
-            return hasMatchingGenre;
-        });
-
-        console.log('필터링된 비슷한 콘텐츠 수:', recommendedRaw.length);
-
-        if (recommendedRaw.length === 0) {
-            console.log('⚠️ 비슷한 장르의 콘텐츠를 찾지 못했습니다!');
-            document.getElementById('recommended-list').innerHTML = '<p>비슷한 콘텐츠를 찾을 수 없습니다.</p>';
-            return;
-        }
-
-        const recommended = shuffleArray(recommendedRaw).slice(0, 20); // 랜덤 20개
-        console.log('최종 표시될 비슷한 콘텐츠 수:', recommended.length);
-
-        const recBox = document.getElementById('recommended-list');
-        recBox.classList.add('scroll-row'); // 가로 스크롤 스타일 클래스 적용
-        recBox.innerHTML = ''; // 기존 내용 초기화
-
-        recommended.forEach(rec => {
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-
-            // 이미지가 있는 경우와 없는 경우 처리
-            let imageContent;
-            if (rec.poster_path && rec.poster_path !== null) {
-                imageContent = `<img src="${IMAGE_BASE + rec.poster_path}" alt="${rec.title || rec.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:240px;background-color:black;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;border-radius:10px;\\'>이미지 없음</div>';">`;
-            } else {
-                imageContent = `<div style="width: 100%; height: 240px; background-color: black; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; border-radius: 10px;">이미지 없음</div>`;
-            }
-
-            card.innerHTML = `
-                <a href="detail.html?id=${rec.id}&type=${rec.type}">
-                    ${imageContent}
-                    <p>${rec.title || rec.name}</p>
-                </a>
-            `;
-            recBox.appendChild(card);
-        });
+        await recommendSimilarContent(item);
 
     } catch (err) {
         console.error('에러 발생:', err);
         document.body.innerHTML = '<p style="color:white; text-align:center;">오류가 발생했습니다.</p>';
+    }
+}
+
+// AI 기반 콘텐츠 추천 함수
+async function recommendSimilarContent(item) {
+    const recBox = document.getElementById('recommended-list');
+    recBox.classList.add('scroll-row');
+
+    try {
+        // 로딩 상태 표시
+        recBox.innerHTML = '<p style="color: #ccc; text-align: center;">🤖 AI가 비슷한 콘텐츠를 분석하고 있습니다...</p>';
+
+        // API 서버에 추천 요청
+        const response = await fetch('http://localhost:5000/api/recommend-content', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                movie_id: item.id,
+                type: item.type,
+                max_recommendations: 15
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`API 요청 실패: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.recommendations && data.recommendations.length > 0) {
+            console.log(`AI 추천 완료: ${data.recommendations.length}개의 유사 콘텐츠 발견`);
+
+            // 추천 콘텐츠 표시
+            recBox.innerHTML = '';
+
+            data.recommendations.forEach(rec => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+
+                // 이미지가 있는 경우와 없는 경우 처리
+                let imageContent;
+                if (rec.poster_path && rec.poster_path !== null) {
+                    imageContent = `<img src="${IMAGE_BASE + rec.poster_path}" alt="${rec.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:240px;background-color:black;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;border-radius:10px;\\'>이미지 없음</div>';">`;
+                } else {
+                    imageContent = `<div style="width: 100%; height: 240px; background-color: black; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; border-radius: 10px;">이미지 없음</div>`;
+                }
+
+                card.innerHTML = `
+                    <a href="detail.html?id=${rec.id}&type=${rec.type}">
+                        ${imageContent}
+                        <p>${rec.title}</p>
+                    </a>
+                `;
+                recBox.appendChild(card);
+            });
+
+        } else {
+            recBox.innerHTML = `
+                <div style="text-align: center; color: #ccc; padding: 20px;">
+                    <p>🤖 ${data.message || '현재 콘텐츠와 유사한 콘텐츠를 찾을 수 없습니다.'}</p>
+                    <p style="font-size: 12px; color: #888;">줄거리 정보가 부족하거나 유사한 콘텐츠가 없을 수 있습니다.</p>
+                </div>
+            `;
+        }
+
+    } catch (error) {
+        console.error('AI 추천 오류:', error);
+
+        // 오류 시 기본 메시지 표시
+        recBox.innerHTML = `
+            <div style="text-align: center; color: #ff6b6b; padding: 20px;">
+                <p>🔧 AI 추천 서비스에 연결할 수 없습니다</p>
+                <p style="font-size: 12px; color: #888;">API 서버가 실행 중인지 확인해주세요</p>
+                <button onclick="location.reload()" style="margin-top: 10px; padding: 8px 16px; background: #ff6b6b; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    다시 시도
+                </button>
+            </div>
+        `;
     }
 }
 
