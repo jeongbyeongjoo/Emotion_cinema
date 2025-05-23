@@ -131,7 +131,7 @@ main {
   flex-wrap: wrap;
   padding: 0 20px;
 padding-top: 0px;
-  padding-bottom: 100px;
+padding-bottom: 30px;
 }
 
 .detail-left {
@@ -224,7 +224,7 @@ scrollbar-width: none;
 .movie-card {
 flex: 0 0 auto;
 width: 150px;
-text-align: center;
+text-align: left;
 }
 
 .movie-card img {
@@ -245,6 +245,7 @@ h2 {
 #recommended-list {
   padding-left: 110px;
   padding-right: 110px;
+padding-top: 15px;
 }
 
 .similar-container {
