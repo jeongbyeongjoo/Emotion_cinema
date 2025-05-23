@@ -70,6 +70,9 @@ function goToUrl() {
         ? '../json/'
         : 'json/';
 
+    // 상세페이지에서의 URL 생성 시 올바른 상대 경로 설정
+    const isDetailPage = window.location.pathname.includes('/movie_detail/');
+
     // 먼저 영화 검색
     fetch(jsonPath + 'all_movies.json')
         .then(response => {
@@ -79,7 +82,9 @@ function goToUrl() {
         .then(movies => {
             let obj = movies.find(movie => movie.title === searchInput.value);
             if (obj) {
-                const url = `movie_detail/detail.html?id=${obj.id}&type=movie`;
+                const url = isDetailPage
+                    ? `detail.html?id=${obj.id}&type=movie`
+                    : `movie_detail/detail.html?id=${obj.id}&type=movie`;
                 window.open(url);
                 return;
             }
@@ -94,7 +99,9 @@ function goToUrl() {
         .then(dramas => {
             let obj = dramas.find(drama => (drama.title || drama.name) === searchInput.value);
             if (obj) {
-                const url = `movie_detail/detail.html?id=${obj.id}&type=tv`;
+                const url = isDetailPage
+                    ? `detail.html?id=${obj.id}&type=tv`
+                    : `movie_detail/detail.html?id=${obj.id}&type=tv`;
                 window.open(url);
             } else {
                 alert("컨텐츠를 찾을 수 없습니다.");
