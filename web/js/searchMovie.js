@@ -85,7 +85,7 @@ function goToUrl() {
                 const url = isDetailPage
                     ? `detail.html?id=${obj.id}&type=movie`
                     : `movie_detail/detail.html?id=${obj.id}&type=movie`;
-                window.open(url);
+                window.location.href = url;
                 return;
             }
 
@@ -102,7 +102,7 @@ function goToUrl() {
                 const url = isDetailPage
                     ? `detail.html?id=${obj.id}&type=tv`
                     : `movie_detail/detail.html?id=${obj.id}&type=tv`;
-                window.open(url);
+                window.location.href = url;
             } else {
                 alert("컨텐츠를 찾을 수 없습니다.");
             }
