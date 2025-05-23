@@ -74,35 +74,67 @@ html, body {
     cursor: pointer;
 }
 
-.slider {
-  height: 500px;
-  width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
-  overflow: hidden;
-  position: relative;
-}
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
   
-.slides {
-  display: flex;
-  width: 300%;
-  transition: transform 0.5s ease-in-out;
-}
+  #suggestions { 
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    top: 100%;
+    border: 1px solid #ccc;
+    max-height: 400px;
+    overflow-y: auto;  /* 스크롤 */
+    background-color: #111;
+    position: absolute;
+    /* width: 100%; */
+    z-index: 1000; /*우선순위*/
+  }
   
-.slide {
-  flex: 0 0 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  #suggestions li {
+      padding: 10px;
+      cursor: pointer;
+  }
+  
+  #suggestions li:hover {
+      background-color: #222;
+  }
+  
+  .left-group {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      height: 100px;
+  }
+  
+  main {
+      flex: 1;
+  }
+  
+  .menu {
+      display: flex;
+      gap: 36px;
+      font-size: 20px;
+      font-weight: 200;
+  }
+  
+  .menu li {
+      list-style: none;
+  }
+  .emotion_cinema-logo {
+      padding-left: 20px;
+      padding-top: 10px;
+      height: 80px
+  }
+  .user-icon {
+      padding-right: 20px;
+      height: 40px;
+  }
 
-.slide img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-  
+/*banner*/
 .dots {
   position: absolute;
   bottom: 15px;
@@ -124,75 +156,15 @@ html, body {
     background-color: white;
 }
 
-#searchInput {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-}
-
-#suggestions { 
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  top: 100%;
-  border: 1px solid #ccc;
-  max-height: 400px;
-  overflow-y: auto;  /* 스크롤 */
-  background-color: #111;
-  position: absolute;
-  /* width: 100%; */
-  z-index: 1000; /*우선순위*/
-}
-
-#suggestions li {
-    padding: 10px;
-    cursor: pointer;
-}
-
-#suggestions li:hover {
-    background-color: #222;
-}
-
-.left-group {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-    height: 100px;
-}
-
-main {
-    flex: 1;
-}
-
-.menu {
-    display: flex;
-    gap: 36px;
-    font-size: 20px;
-    font-weight: 200;
-}
-
-.menu li {
-    list-style: none;
-}
-.emotion_cinema-logo {
-    padding-left: 20px;
-    padding-top: 10px;
-    height: 80px
-}
-.user-icon {
-    padding-right: 20px;
-    height: 40px;
-}
-
 #Banner {
     display: flex;
-    justify-content: center;
-    margin: 20px auto;
-    width: 100%;
-    max-width: 1344px;
-    overflow: hidden;
-    position: relative;
-    left: 0;
+        justify-content: center;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 1344px;
+        overflow: hidden;
+        position: relative;
+        left: 0;
         /* 기본값 설정 */
 }
 
@@ -200,15 +172,14 @@ main {
     display: flex;
     position: relative;
     left: 0;
-    width: 4032px;
-    transition: left 0.5s ease-in-out;
+    transition: left 0.5s;
 }
 
 .banner {
     width: 1344px;
-    height: 525px;
+        height: 525px;
     border-radius: 20px;
-    overflow: hidden;
+        overflow: hidden;
 }
 
 .banner img {
@@ -219,116 +190,24 @@ main {
 
 #Banner_button {
     margin-bottom: 24px;
-    /* 적당한 간격 확보 */
 }
 
-#Banner_button ul,
-#Channel_button ul {
+#Banner_button ul {
     display: flex;
         justify-content: center;
         margin-top: 12px;
         gap: 6px;
 }
 
-#Banner_button ul li,
-#Channel_button ul li {
+#Banner_button ul li{
     width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    cursor: pointer;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
 }
 
-#Banner_button ul li:nth-child(2),
-#Channel_button ul li:nth-child(1) {
+#Banner_button ul li:nth-child(1) {
     background: white;
-}
-
-#Channel {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    scroll-behavior: smooth;
-    /* 수평으로 한 줄 정렬 */
-    padding: 0 20px;
-    -ms-overflow-style: none;
-    /* IE */
-    scrollbar-width: none;
-    /* Firefox */
-    position: relative;
-    touch-action: pan-x;
-}
-
-#ChannelList {
-    display: flex;
-    gap: 12px;
-}
-
-/* 리스트 항목이 한 줄로 정렬되게 */
-#ChannelList li {
-    flex: 0 0 auto;
-    list-style: none;
-}
-
-/* 채널 이미지 스타일 */
-#Channel {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.channel-wrapper {
-    position: relative;
-    max-width: 100%;
-        margin: 0 auto;
-        padding: 0 40px;
-        /* 버튼이 너무 바깥으로 가지 않도록 */
-    }
-
-.channels {
-    width: 268px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 12px;
-    transition: transform 0.2s ease-in-out;
-        cursor: pointer;
-    }
-    
-    .channels:hover {
-        transform: scale(1.05);
-}
-
-#Channel::-webkit-scrollbar {
-    display: none;
-}
-
-#Channel {
-    -ms-overflow-style: none;
-    /* IE */
-    scrollbar-width: none;
-    /* Firefox */
-    touch-action: pan-x;
-}
-
-#left_button,
-#right_button {
-    position: absolute;
-    top: 50%;
-        transform: translateY(-50%);
-        width: 36px;
-        height: 36px;
-        cursor: pointer;
-        z-index: 10;
-}
-
-#left_button {
-    left: 16px;
-}
-
-#right_button {
-    right: 16px;
 }
 
 #top {
