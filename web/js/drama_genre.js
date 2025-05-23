@@ -75,7 +75,14 @@ fetch('./json/dramas_popularity.json')
                 const card = document.createElement('a');
                 card.className = 'movie-card';
                 card.href = `movie_detail/detail.html?id=${drama.id}&type=tv`;
-                card.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${drama.poster_path}" alt="${drama.title || drama.name}">`;
+
+                // 이미지가 있는 경우와 없는 경우 처리
+                if (drama.poster_path && drama.poster_path !== null) {
+                    card.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${drama.poster_path}" alt="${drama.title || drama.name}" onerror="this.style.display='none'; this.parentElement.style.backgroundColor='black'; this.parentElement.style.display='flex'; this.parentElement.style.alignItems='center'; this.parentElement.style.justifyContent='center'; this.parentElement.innerHTML='<span style=color:#666;font-size:12px;>이미지 없음</span>';">`;
+                } else {
+                    card.innerHTML = `<div style="width: 100%; height: 300px; background-color: black; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #666; font-size: 12px;">이미지 없음</div>`;
+                }
+
                 slide.appendChild(card);
                 swiperWrapper.appendChild(slide);
             });

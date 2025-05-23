@@ -205,14 +205,14 @@ main {
 
 .banner {
     width: 1344px;
-        height: 525px;
+    height: 525px;
     border-radius: 20px;
         overflow: hidden;
 }
 
 .banner img {
     width: 100%;
-        height: 100%;
+    height: 100%;
         object-fit: cover;
 }
 
@@ -289,8 +289,14 @@ main {
     width: 268px;
     height: 100px;
     object-fit: cover;
-        border-radius: 12px;
+    border-radius: 12px;
+    transition: transform 0.2s ease-in-out;
+        cursor: pointer;
     }
+    
+    .channels:hover {
+        transform: scale(1.05);
+}
 
 #Channel::-webkit-scrollbar {
     display: none;
@@ -421,6 +427,8 @@ h1 {
         height: 300px;
         object-fit: cover;
         border-radius: 8px;
+        background-color: black;
+            display: block;
     }
     
     .movie-info {
@@ -489,6 +497,8 @@ h1 {
         height: 300px;
         object-fit: cover;
         border-radius: 8px;
+        background-color: black;
+            display: block;
     }
     
     #drama-container .movie-info {
@@ -558,6 +568,8 @@ h1 {
     height: 300px;
         object-fit: cover;
     border-radius: 8px;
+    background-color: black;
+        display: block;
     /* pointer-events: none; */
         /* 이미지 클릭을 위해 주석 처리 또는 삭제 */
   }
@@ -590,7 +602,12 @@ h1 {
     width: 250px;
     text-decoration: none;
     color: inherit;
-  }
+    transition: transform 0.2s ease-in-out;
+    }
+    
+    .top10-card:hover {
+        transform: scale(1.02);
+}
 
   .top10-flex {
     display: flex;
@@ -618,9 +635,17 @@ h1 {
     object-fit: cover;
     border-radius: 8px;
     z-index: 1;
-  }
+    transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+        background-color: black;
+        display: block;
+    }
+    
+    .poster:hover {
+        transform: scale(1.05);
+}
 
-  .title {
+.title {
     margin-top: 12px;
     font-size: 16px;
     font-weight: 500;

@@ -9,19 +9,24 @@ function renderTop10(containerId, jsonPath, type) {
             container.innerHTML = '';  // 초기화
 
             top10.forEach((movie, index) => {
-                const imageUrl = movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : 'no_image.jpg';
-
                 const card = document.createElement('a');
                 card.href = `movie_detail/detail.html?id=${movie.id}&type=${type}`;
                 card.classList.add('top10-card');
+
+                // 이미지가 있는 경우와 없는 경우 처리
+                let imageContent;
+                if (movie.poster_path && movie.poster_path !== null) {
+                    const imageUrl = `${IMAGE_BASE}${movie.poster_path}`;
+                    imageContent = `<img src="${imageUrl}" alt="${movie.title}" class="poster" onerror="this.style.display='none'; this.parentElement.style.backgroundColor='black';">`;
+                } else {
+                    imageContent = `<div class="poster" style="background-color: black; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px;">이미지 없음</div>`;
+                }
 
                 card.innerHTML = `
             <div class="top10-flex">
               <div class="rank-number-side">${index + 1}</div>
               <div class="poster-wrapper">
-                <img src="${imageUrl}" alt="${movie.title}" class="poster">
+                ${imageContent}
               </div>
             </div>
           `;

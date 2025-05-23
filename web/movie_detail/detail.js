@@ -34,8 +34,8 @@ async function loadContentData() {
     try {
         // 영화와 드라마 데이터를 동시에 로드 (더 작은 파일 사용)
         const [moviesResponse, dramasResponse] = await Promise.all([
-            fetch('../json/movies_top10.json'),
-            fetch('../json/dramas_top10.json')
+            fetch('../json/all_movies.json'),
+            fetch('../json/all_tv_shows.json')
         ]);
 
         if (!moviesResponse.ok || !dramasResponse.ok) {
@@ -91,8 +91,23 @@ async function loadContentData() {
 
         // 2-2. 상세 정보 채우기
         document.getElementById('movie-title').textContent = item.title || item.name;
-        document.getElementById('movie-poster').src = IMAGE_BASE + item.poster_path;
-        document.getElementById('movie-poster').alt = item.title || item.name;
+
+        // 포스터 이미지 처리
+        const posterImg = document.getElementById('movie-poster');
+        if (item.poster_path && item.poster_path !== null) {
+            posterImg.src = IMAGE_BASE + item.poster_path;
+            posterImg.alt = item.title || item.name;
+            posterImg.style.backgroundColor = 'black';
+            posterImg.onerror = function () {
+                this.style.display = 'none';
+                this.parentElement.style.backgroundColor = 'black';
+                this.parentElement.innerHTML = '<div style="width: 350px; height: 525px; background-color: black; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; border-radius: 12px;">이미지 없음</div>';
+            };
+        } else {
+            posterImg.style.display = 'none';
+            posterImg.parentElement.innerHTML = '<div style="width: 350px; height: 525px; background-color: black; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; border-radius: 12px;">이미지 없음</div>';
+        }
+
         document.getElementById('movie-vote').textContent = item.vote_average;
         document.getElementById('movie-overview').textContent = item.overview || '정보가 없습니다.';
         document.getElementById('movie-date').textContent = item.release_date || item.first_air_date || '';
@@ -143,9 +158,18 @@ async function loadContentData() {
         recommended.forEach(rec => {
             const card = document.createElement('div');
             card.className = 'movie-card';
+
+            // 이미지가 있는 경우와 없는 경우 처리
+            let imageContent;
+            if (rec.poster_path && rec.poster_path !== null) {
+                imageContent = `<img src="${IMAGE_BASE + rec.poster_path}" alt="${rec.title || rec.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'width:100%;height:240px;background-color:black;display:flex;align-items:center;justify-content:center;color:#666;font-size:12px;border-radius:10px;\\'>이미지 없음</div>';">`;
+            } else {
+                imageContent = `<div style="width: 100%; height: 240px; background-color: black; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; border-radius: 10px;">이미지 없음</div>`;
+            }
+
             card.innerHTML = `
                 <a href="detail.html?id=${rec.id}&type=${rec.type}">
-                    <img src="${IMAGE_BASE + rec.poster_path}" alt="${rec.title || rec.name}" onerror="this.src='../images/no-image.png'">
+                    ${imageContent}
                     <p>${rec.title || rec.name}</p>
                 </a>
             `;
