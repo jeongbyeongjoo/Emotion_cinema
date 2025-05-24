@@ -799,7 +799,7 @@ h1 {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     border-radius: 20px;
     width: 90%;
-    height: 80%;
+    height: 85%;
     max-width: 1500px;
     max-height: 1200px;
     overflow-y: auto;
@@ -886,20 +886,23 @@ h1 {
 .popup-footer {
     padding: 20px 30px 30px;
     display: flex;
-    gap: 15px;
+    gap: 10px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .popup-btn-primary,
 .popup-btn-secondary {
-    padding: 12px 25px;
+    padding: 12px 20px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
-    min-width: 120px;
+    min-width: 110px;
+        flex: 1;
+        max-width: 150px;
 }
 
 .popup-btn-primary {
@@ -945,4 +948,344 @@ h1 {
     .popup-btn-secondary {
         width: 100%;
     }
+}
+/* ===== 웹캠 감정 인식 스타일 ===== */
+
+/* 화면 전환 애니메이션 */
+.popup-screen {
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.popup-screen.active {
+    display: block;
+    opacity: 1;
+}
+
+/* 웹캠 컨테이너 */
+.emotion-detection {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.webcam-container {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+    background: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+#webcam {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform: scaleX(-1);
+    /* 거울 효과 */
+}
+
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #333;
+    border-top: 4px solid #e50914;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-spinner p {
+    color: #fff;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* 감정 분석 결과 */
+.emotion-results {
+    flex: 1;
+    min-width: 300px;
+}
+
+.emotion-status {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.emotion-status h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #fff;
+}
+
+.emotion-confidence {
+    font-size: 14px;
+    color: #aaa;
+}
+
+/* 감정 바 스타일 */
+.emotion-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.emotion-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid #2a2a2a;
+}
+
+.emotion-bar span:first-child {
+    min-width: 80px;
+    font-size: 14px;
+    color: #ddd;
+}
+
+.emotion-bar span:last-child {
+    min-width: 40px;
+    text-align: right;
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 500;
+}
+
+.bar {
+    flex: 1;
+    height: 20px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.1s ease-out;
+    /* 더 빠른 전환으로 실시간 느낌 */
+    background: linear-gradient(90deg, #666 0%, #999 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* 각 감정별 색상 및 애니메이션 */
+#happyBar {
+    background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+#sadBar {
+    background: linear-gradient(90deg, #4a90e2 0%, #7bb3f0 100%);
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
+}
+
+#angryBar {
+    background: linear-gradient(90deg, #e50914 0%, #f40612 100%);
+    box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+}
+
+#surpriseBar {
+    background: linear-gradient(90deg, #ff6b35 0%, #ff8c42 100%);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+}
+
+/* 활성 감정 바에 펄스 효과 */
+.emotion-bar.active .fill {
+    animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    to {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    }
+}
+
+/* 실시간 업데이트 중임을 표시하는 스타일 */
+.emotion-status.analyzing {
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+    border: 1px solid #444;
+    animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.02);
+        opacity: 0.9;
+    }
+}
+
+/* 모바일 반응형 - 웹캠 */
+@media (max-width: 768px) {
+    .emotion-detection {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .webcam-container {
+        max-width: 100%;
+    }
+
+    .emotion-results {
+        min-width: auto;
+    }
+
+    .emotion-bar {
+        padding: 10px;
+    }
+
+    .emotion-bar span:first-child {
+        min-width: 70px;
+        font-size: 13px;
+    }
+}
+
+/* ===== 사진 촬영 기능 스타일 ===== */
+
+/* 촬영 버튼 컨테이너 */
+.capture-controls {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* 촬영 버튼 */
+.capture-button {
+    background: linear-gradient(135deg, #e50914 0%, #f40612 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.capture-button:hover {
+    background: linear-gradient(135deg, #f40612 0%, #e50914 100%);
+    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.6);
+    transform: translateY(-2px);
+}
+
+.capture-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(229, 9, 20, 0.4);
+}
+
+.capture-button:disabled {
+    background: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 촬영된 사진 표시 영역 */
+.captured-photo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 120px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    padding: 8px;
+    border: 2px solid #e50914;
+    z-index: 5;
+}
+
+.captured-photo canvas {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+}
+
+.captured-photo p {
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    margin: 5px 0 0 0;
+    font-weight: 500;
 }
