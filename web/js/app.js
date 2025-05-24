@@ -133,6 +133,67 @@ window.addEventListener('load', function () {
     console.log('자동 배너 전환 시작');
     checkImages(); // 이미지 로드 상태 확인
     debugBannerStyles(); // 초기 스타일 상태 확인
-    // 2초마다 자동 전환
+    // 7초마다 자동 전환
     setInterval(autoSlide, 7000);
+
+    // 웰컴 팝업 표시
+    showWelcomePopup();
+});
+
+// ===== 웰컴 팝업창 관련 함수들 =====
+
+// 웰컴 팝업 표시 함수
+function showWelcomePopup() {
+    // 로컬스토리지에서 "다시 보지 않기" 설정 확인
+    const dontShowAgain = localStorage.getItem('welcomePopupDontShow');
+
+    if (!dontShowAgain) {
+        const popup = document.getElementById('welcomePopup');
+        if (popup) {
+            // 0.5초 지연 후 팝업 표시 (페이지 로딩 완료 후)
+            setTimeout(() => {
+                popup.classList.add('active');
+                document.body.style.overflow = 'hidden'; // 스크롤 방지
+            }, 500);
+        }
+    }
+}
+
+// 웰컴 팝업 닫기 함수
+function closeWelcomePopup(dontShowAgain = false) {
+    const popup = document.getElementById('welcomePopup');
+
+    if (popup) {
+        popup.classList.remove('active');
+        document.body.style.overflow = 'auto'; // 스크롤 복원
+
+        // "다시 보지 않기" 선택한 경우
+        if (dontShowAgain) {
+            localStorage.setItem('welcomePopupDontShow', 'true');
+            console.log('웰컴 팝업 - 다시 보지 않기 설정됨');
+        }
+    }
+}
+
+// 팝업 외부 클릭 시 닫기
+document.addEventListener('click', function (event) {
+    const popup = document.getElementById('welcomePopup');
+    const popupContent = document.querySelector('.popup-content');
+
+    if (popup && popup.classList.contains('active')) {
+        // 팝업 오버레이를 클릭했지만 팝업 내용은 클릭하지 않은 경우
+        if (event.target === popup && !popupContent.contains(event.target)) {
+            closeWelcomePopup();
+        }
+    }
+});
+
+// ESC 키로 팝업 닫기
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        const popup = document.getElementById('welcomePopup');
+        if (popup && popup.classList.contains('active')) {
+            closeWelcomePopup();
+        }
+    }
 });
