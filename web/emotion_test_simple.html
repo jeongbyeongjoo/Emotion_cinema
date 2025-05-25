@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 감정 인식 - Emotion Cinema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #e50914, #f40612);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .status-loading {
+            background: #ff9800;
+            color: white;
+        }
+
+        .status-ready {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-error {
+            background: #f44336;
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .webcam-section {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .webcam-container {
+            position: relative;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        #webcam {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: scaleX(-1);
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transform: scaleX(-1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e50914 0%, #f40612 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(229, 9, 20, 0.6);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results-section {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .emotion-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .emotion-card.active {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.1);
+            transform: scale(1.05);
+        }
+
+        .emotion-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .emotion-name {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .emotion-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🎭 감정 인식</h1>
+        <p>얼굴 표정을 분석하여 감정을 인식합니다</p>
+        <div id="statusBadges">
+            <span class="status-badge status-loading">🔄 서버 연결 확인 중...</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="webcam-section">
+            <div class="webcam-container">
+                <video id="webcam" autoplay muted playsinline></video>
+                <canvas id="overlay"></canvas>
+            </div>
+
+            <div class="controls">
+                <button id="startBtn" class="btn btn-primary">📹 실시간 감정 분석</button>
+                <button id="stopBtn" class="btn btn-secondary" disabled>⏹️ 분석 정지</button>
+                <button id="testBtn" class="btn btn-secondary">🧪 서버 테스트</button>
+                <button id="captureBtn" class="btn btn-secondary" disabled>📸 사진 분석</button>
+                <button id="recommendBtn" class="btn btn-primary" disabled>🎬 맞춤 영화 추천</button>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="card">
+                <h3 id="currentStatus">😐 감정 분석 대기 중...</h3>
+                <p id="analysisInfo">서버 연결을 확인하고 분석을 시작하세요</p>
+            </div>
+
+            <div class="card">
+                <h3>📊 실시간 감정 분석 결과</h3>
+                <div class="emotion-grid">
+                    <div class="emotion-card" id="happyCard">
+                        <span class="emotion-emoji">😊</span>
+                        <div class="emotion-name">기쁨 (Happy)</div>
+                        <div class="emotion-score" id="happyScore">0%</div>
+                    </div>
+                    <div class="emotion-card" id="sadCard">
+                        <span class="emotion-emoji">😢</span>
+                        <div class="emotion-name">슬픔 (Sad)</div>
+                        <div class="emotion-score" id="sadScore">0%</div>
+                    </div>
+                    <div class="emotion-card" id="angryCard">
+                        <span class="emotion-emoji">😠</span>
+                        <div class="emotion-name">화남 (Angry)</div>
+                        <div class="emotion-score" id="angryScore">0%</div>
+                    </div>
+                    <div class="emotion-card" id="surprisedCard">
+                        <span class="emotion-emoji">😮</span>
+                        <div class="emotion-name">놀람 (Surprised)</div>
+                        <div class="emotion-score" id="surprisedScore">0%</div>
+                    </div>
+                    <div class="emotion-card" id="neutralCard">
+                        <span class="emotion-emoji">😐</span>
+                        <div class="emotion-name">무표정 (Neutral)</div>
+                        <div class="emotion-score" id="neutralScore">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="newAnalysisBtn" class="btn btn-primary">🔄 새로운 감정 분석</button>
+                <button id="homeBtn" class="btn btn-secondary">🏠 홈페이지로</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 감정 인식 시스템 =====
+
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        let isAnalyzing = false;
+        let analysisInterval = null;
+        let video = null;
+        let canvas = null;
+        let ctx = null;
+        let serverConnected = false;
+        let currentEmotion = null; // 현재 감정 상태 저장
+
+        // DOM 요소들
+        const elements = {
+            webcam: document.getElementById('webcam'),
+            overlay: document.getElementById('overlay'),
+            startBtn: document.getElementById('startBtn'),
+            stopBtn: document.getElementById('stopBtn'),
+            testBtn: document.getElementById('testBtn'),
+            captureBtn: document.getElementById('captureBtn'),
+            recommendBtn: document.getElementById('recommendBtn'),
+            currentStatus: document.getElementById('currentStatus'),
+            analysisInfo: document.getElementById('analysisInfo'),
+            statusBadges: document.getElementById('statusBadges'),
+            // 감정 점수들
+            happyScore: document.getElementById('happyScore'),
+            sadScore: document.getElementById('sadScore'),
+            angryScore: document.getElementById('angryScore'),
+            surprisedScore: document.getElementById('surprisedScore'),
+            neutralScore: document.getElementById('neutralScore'),
+            // 감정 카드들
+            happyCard: document.getElementById('happyCard'),
+            sadCard: document.getElementById('sadCard'),
+            angryCard: document.getElementById('angryCard'),
+            surprisedCard: document.getElementById('surprisedCard'),
+            neutralCard: document.getElementById('neutralCard'),
+            // 네비게이션 버튼들
+            newAnalysisBtn: document.getElementById('newAnalysisBtn'),
+            homeBtn: document.getElementById('homeBtn')
+        };
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', async function () {
+            video = elements.webcam;
+            canvas = elements.overlay;
+            ctx = canvas.getContext('2d');
+
+            setupEventListeners();
+            await checkServerConnection();
+        });
+
+        // 서버 연결 확인
+        async function checkServerConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/emotion-test`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    serverConnected = true;
+
+                    updateStatus('✅ 서버 연결 완료!', 'ready');
+                    elements.analysisInfo.textContent = '이제 실시간 감정 분석을 시작할 수 있습니다';
+                } else {
+                    throw new Error(`서버 응답 오류: ${response.status}`);
+                }
+
+            } catch (error) {
+                console.error('서버 연결 실패:', error);
+                serverConnected = false;
+                updateStatus('❌ 서버 연결 실패', 'error');
+                elements.analysisInfo.textContent = 'API 서버 연결에 실패했습니다. 서버를 시작해주세요.';
+            }
+        }
+
+        // 이벤트 리스너 설정
+        function setupEventListeners() {
+            elements.startBtn.addEventListener('click', startAnalysis);
+            elements.stopBtn.addEventListener('click', stopAnalysis);
+            elements.testBtn.addEventListener('click', testServer);
+            elements.captureBtn.addEventListener('click', captureAndAnalyze);
+            elements.recommendBtn.addEventListener('click', recommendMovies);
+            elements.newAnalysisBtn.addEventListener('click', startNewAnalysis);
+            elements.homeBtn.addEventListener('click', goToHome);
+        }
+
+        // 서버 테스트
+        async function testServer() {
+            await checkServerConnection();
+        }
+
+        // 분석 시작
+        async function startAnalysis() {
+            if (!serverConnected) {
+                await checkServerConnection();
+                return;
+            }
+
+            try {
+                isAnalyzing = true;
+                elements.startBtn.disabled = true;
+                elements.stopBtn.disabled = false;
+                elements.captureBtn.disabled = false;
+
+                // 웹캠 스트림 시작
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: 640,
+                        height: 480,
+                        facingMode: 'user'
+                    }
+                });
+
+                video.srcObject = stream;
+
+                video.addEventListener('loadedmetadata', () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+
+                    // 실시간 감정 분석 시작
+                    startRealTimeAnalysis();
+                });
+
+            } catch (error) {
+                console.error('웹캠 시작 실패:', error);
+                stopAnalysis();
+            }
+        }
+
+        // 실시간 감정 분석
+        function startRealTimeAnalysis() {
+            updateStatus('🔍 실시간 감정 분석 중', 'ready');
+
+            analysisInterval = setInterval(async () => {
+                if (!isAnalyzing || !video.videoWidth || !video.videoHeight) return;
+
+                try {
+                    // 현재 프레임을 캔버스에 그리기
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = video.videoWidth;
+                    tempCanvas.height = video.videoHeight;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(video, 0, 0);
+
+                    // Base64로 인코딩
+                    const imageData = tempCanvas.toDataURL('image/jpeg', 0.8);
+
+                    // 백엔드 API 호출
+                    const response = await fetch(`${API_BASE_URL}/emotion-webcam`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            frame: imageData
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success && result.face_detected) {
+                        // 실제 감정 결과 업데이트
+                        updateEmotionDisplay(result.emotions);
+
+                        // 얼굴 박스 그리기
+                        if (result.face_box) {
+                            drawFaceBox(result.face_box);
+                        }
+
+                        // 주요 감정 표시
+                        const maxEmotion = Object.keys(result.emotions).reduce((a, b) =>
+                            result.emotions[a] > result.emotions[b] ? a : b
+                        );
+                        const confidence = result.emotions[maxEmotion];
+
+                        if (confidence > 25) {
+                            elements.currentStatus.textContent =
+                                `${getEmotionEmoji(maxEmotion)} ${getEmotionName(maxEmotion)} 감정 감지됨 (${confidence}%)`;
+                        }
+                    } else {
+                        // 얼굴이 감지되지 않음
+                        elements.currentStatus.textContent = '😐 얼굴이 감지되지 않습니다';
+                        resetEmotionScores();
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+
+                } catch (error) {
+                    console.error('실시간 분석 오류:', error);
+                }
+
+            }, 1000); // 1초마다 분석 (서버 부하 고려)
+        }
+
+        // 사진 촬영 후 분석
+        async function captureAndAnalyze() {
+            if (!serverConnected) {
+                return;
+            }
+
+            try {
+                // 현재 프레임 캡처
+                const captureCanvas = document.createElement('canvas');
+                captureCanvas.width = video.videoWidth || 640;
+                captureCanvas.height = video.videoHeight || 480;
+                const captureCtx = captureCanvas.getContext('2d');
+                captureCtx.drawImage(video, 0, 0);
+
+                // Base64로 인코딩
+                const imageData = captureCanvas.toDataURL('image/jpeg', 0.9);
+
+                // 백엔드 감정 분석 API 호출
+                const response = await fetch(`${API_BASE_URL}/analyze-emotion`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: imageData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    updateEmotionDisplay(result.emotions);
+
+                    // 감정 분석 결과를 오래 표시
+                    elements.currentStatus.textContent =
+                        `${getEmotionEmoji(result.dominant_emotion.name)} ${getEmotionName(result.dominant_emotion.name)} (${result.dominant_emotion.confidence}%)`;
+
+                    // 이미지 다운로드
+                    const link = document.createElement('a');
+                    link.href = imageData;
+                    link.download = `emotion_analysis_${Date.now()}.jpg`;
+                    link.click();
+                }
+
+            } catch (error) {
+                console.error('사진 분석 오류:', error);
+            }
+        }
+
+        // 얼굴 박스 그리기
+        function drawFaceBox(faceBox) {
+            if (!ctx || !faceBox) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const [x, y, width, height] = faceBox;
+
+            // 얼굴 박스
+            ctx.strokeStyle = '#e50914';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, width, height);
+
+            // 간단한 포인트들
+            ctx.fillStyle = '#e50914';
+            const points = [
+                [x + width * 0.3, y + height * 0.4], // 왼쪽 눈
+                [x + width * 0.7, y + height * 0.4], // 오른쪽 눈
+                [x + width * 0.5, y + height * 0.6], // 코
+                [x + width * 0.5, y + height * 0.8]  // 입
+            ];
+
+            points.forEach(([px, py]) => {
+                ctx.beginPath();
+                ctx.arc(px, py, 2, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+        }
+
+        // 감정 표시 업데이트
+        function updateEmotionDisplay(emotions) {
+            const emotionMapping = {
+                happy: 'happyScore',
+                sad: 'sadScore',
+                angry: 'angryScore',
+                surprised: 'surprisedScore',
+                neutral: 'neutralScore'
+            };
+
+            const cardMapping = {
+                happy: 'happyCard',
+                sad: 'sadCard',
+                angry: 'angryCard',
+                surprised: 'surprisedCard',
+                neutral: 'neutralCard'
+            };
+
+            // 모든 카드 비활성화
+            Object.values(cardMapping).forEach(cardId => {
+                const card = elements[cardId];
+                if (card) card.classList.remove('active');
+            });
+
+            // 감정 점수 업데이트
+            Object.keys(emotions).forEach(emotion => {
+                const scoreId = emotionMapping[emotion];
+                const cardId = cardMapping[emotion];
+
+                if (scoreId && elements[scoreId]) {
+                    const percentage = Math.round(emotions[emotion]);
+                    elements[scoreId].textContent = percentage + '%';
+
+                    // 높은 감정 강조
+                    if (percentage > 25 && cardId && elements[cardId]) {
+                        elements[cardId].classList.add('active');
+                    }
+                }
+            });
+
+            // 가장 높은 감정 찾기 및 저장
+            const maxEmotion = Object.keys(emotions).reduce((a, b) =>
+                emotions[a] > emotions[b] ? a : b
+            );
+            const confidence = Math.round(emotions[maxEmotion]);
+
+            // 현재 감정 저장 (영화 추천용)
+            currentEmotion = {
+                emotion: maxEmotion,
+                confidence: confidence,
+                allEmotions: emotions
+            };
+
+            // 추천 버튼 활성화 (일정 신뢰도 이상일 때)
+            if (confidence > 20) {
+                elements.recommendBtn.disabled = false;
+            }
+        }
+
+        // 감정 점수 초기화
+        function resetEmotionScores() {
+            const scoreElements = [
+                'happyScore', 'sadScore', 'angryScore', 'surprisedScore',
+                'neutralScore'
+            ];
+
+            scoreElements.forEach(scoreId => {
+                if (elements[scoreId]) {
+                    elements[scoreId].textContent = '0%';
+                }
+            });
+
+            const cardElements = [
+                'happyCard', 'sadCard', 'angryCard', 'surprisedCard',
+                'neutralCard'
+            ];
+
+            cardElements.forEach(cardId => {
+                if (elements[cardId]) {
+                    elements[cardId].classList.remove('active');
+                }
+            });
+        }
+
+        // 분석 정지
+        function stopAnalysis() {
+            isAnalyzing = false;
+
+            if (analysisInterval) {
+                clearInterval(analysisInterval);
+                analysisInterval = null;
+            }
+
+            if (video.srcObject) {
+                const tracks = video.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+                video.srcObject = null;
+            }
+
+            elements.startBtn.disabled = false;
+            elements.stopBtn.disabled = true;
+            elements.captureBtn.disabled = true;
+
+            elements.currentStatus.textContent = '😐 감정 분석 대기 중...';
+            resetEmotionScores();
+
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // 영화 추천 버튼 클릭 시 새 페이지로 이동
+        async function recommendMovies() {
+            if (!serverConnected) {
+                return;
+            }
+
+            if (!currentEmotion) {
+                return;
+            }
+
+            // 새 페이지로 이동하면서 감정 정보 전달
+            const params = new URLSearchParams({
+                emotion: currentEmotion.emotion,
+                confidence: currentEmotion.confidence
+            });
+
+            window.location.href = `movie_recommendation.html?${params.toString()}`;
+        }
+
+        // 새로운 분석 시작
+        function startNewAnalysis() {
+            elements.recommendBtn.disabled = true;
+            currentEmotion = null;
+            resetEmotionScores();
+            elements.currentStatus.textContent = '😐 감정 분석 대기 중...';
+        }
+
+        // 홈페이지로 이동
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        // 유틸리티 함수들
+        function getEmotionEmoji(emotion) {
+            const emojis = {
+                happy: '😊',
+                sad: '😢',
+                angry: '😠',
+                surprised: '😮',
+                neutral: '😐'
+            };
+            return emojis[emotion] || '😐';
+        }
+
+        function getEmotionName(emotion) {
+            const names = {
+                happy: '기쁨',
+                sad: '슬픔',
+                angry: '화남',
+                surprised: '놀람',
+                neutral: '무표정'
+            };
+            return names[emotion] || '알 수 없음';
+        }
+
+        function updateStatus(message, type) {
+            const badge = elements.statusBadges.querySelector('.status-badge');
+            badge.textContent = message;
+            badge.className = `status-badge status-${type}`;
+        }
+
+        console.log('🤖 감정 인식 시스템 로드 완료');
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 맞춤 영화 추천 - Emotion Cinema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #e50914, #f40612);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .emotion-info {
+            background: rgba(229, 9, 20, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid #e50914;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-bottom: 30px;
+        }
+
+        .movie-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #333;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            border-color: #e50914;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .movie-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #fff;
+            min-height: 40px;
+        }
+
+        .movie-rating {
+            color: #ffd700;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .movie-genre {
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e50914 0%, #f40612 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(229, 9, 20, 0.6);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #ccc;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid #f44336;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: #f44336;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🎬 맞춤 영화 추천</h1>
+        <p>당신의 감정에 딱 맞는 영화들을 찾았습니다!</p>
+    </div>
+
+    <div id="content">
+        <div class="loading">
+            <h3>🔍 감정을 분석하고 영화를 추천하는 중...</h3>
+            <p>잠시만 기다려주세요.</p>
+        </div>
+    </div>
+
+    <script>
+        // URL 파라미터에서 감정 정보 가져오기
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 페이지 로드 시 영화 추천 요청
+        document.addEventListener('DOMContentLoaded', async function () {
+            const emotion = getUrlParameter('emotion');
+            const confidence = getUrlParameter('confidence');
+
+            if (!emotion) {
+                showError('감정 정보가 없습니다. 다시 감정 분석을 진행해주세요.');
+                return;
+            }
+
+            try {
+                await loadMovieRecommendations(emotion, confidence || 0);
+            } catch (error) {
+                console.error('영화 추천 로드 오류:', error);
+                showError('영화 추천을 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+
+        // 영화 추천 로드
+        async function loadMovieRecommendations(emotion, confidence) {
+            try {
+                const response = await fetch('http://localhost:5000/api/recommend-movies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        emotion: emotion,
+                        confidence: parseInt(confidence),
+                        all_emotions: {} // 필요시 추가
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    displayMovieRecommendations(result, emotion, confidence);
+                } else {
+                    showError('영화 추천에 실패했습니다: ' + (result.error || '알 수 없는 오류'));
+                }
+
+            } catch (error) {
+                console.error('API 호출 오류:', error);
+                showError('서버와의 연결에 문제가 발생했습니다. 서버가 실행 중인지 확인해주세요.');
+            }
+        }
+
+        // 영화 추천 결과 표시
+        function displayMovieRecommendations(result, emotion, confidence) {
+            const contentDiv = document.getElementById('content');
+
+            const emotionEmojis = {
+                'happy': '😊',
+                'sad': '😢',
+                'angry': '😠',
+                'surprised': '😮',
+                'neutral': '😐'
+            };
+
+            const emotionNames = {
+                'happy': '기쁨',
+                'sad': '슬픔',
+                'angry': '화남',
+                'surprised': '놀람',
+                'neutral': '무표정'
+            };
+
+            contentDiv.innerHTML = `
+                <div class="emotion-info">
+                    <h2>${emotionEmojis[emotion] || '😐'} ${emotionNames[emotion] || '감정'} 감정 (${confidence}%)</h2>
+                    <p>${result.message}</p>
+                    <p>총 ${result.total_movies}개의 영화를 추천드립니다.</p>
+                </div>
+
+                <div class="movie-grid">
+                    ${result.movie_cards.join('')}
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="goToEmotionTest()">🔄 새로운 감정 분석</button>
+                    <button class="btn btn-secondary" onclick="goToHome()">🏠 홈페이지로</button>
+                </div>
+            `;
+        }
+
+        // 오류 표시
+        function showError(message) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = `
+                <div class="error">
+                    <h3>❌ 오류 발생</h3>
+                    <p>${message}</p>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="goToEmotionTest()">🔄 다시 시도</button>
+                    <button class="btn btn-secondary" onclick="goToHome()">🏠 홈페이지로</button>
+                </div>
+            `;
+        }
+
+        // 감정 분석 페이지로 이동
+        function goToEmotionTest() {
+            window.location.href = 'emotion_test_simple.html';
+        }
+
+        // 홈페이지로 이동
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

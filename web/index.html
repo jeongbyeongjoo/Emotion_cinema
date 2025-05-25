@@ -22,106 +22,50 @@
     <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
     <title>Emotion_cinema</title>
+<style>
+    /* 감정 분석 버튼 스타일 추가 */
+    .emotion-analysis-section {
+        background: linear-gradient(135deg, #a69c9d 0%, #544f4f 100%);
+        padding: 40px 20px;
+        text-align: center;
+        margin: 30px 0;
+        border-radius: 12px;
+    }
+
+    .emotion-analysis-section h2 {
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .emotion-analysis-section p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    .emotion-btn {
+        display: inline-block;
+        background: white;
+        color: #e50914;
+        padding: 15px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .emotion-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        color: #e50914;
+    }
+</style>
 </head>
 
 <body>
-    <!-- 웰컴 팝업창 -->
-    <div id="welcomePopup" class="popup-overlay">
-        <div class="popup-content">
-            <!-- 첫 번째 화면: 웰컴 메시지 -->
-            <div id="welcomeScreen" class="popup-screen active">
-                <div class="popup-header">
-                    <h2>🎬 Emotion Cinema에 오신 것을 환영합니다!</h2>
-                    <button class="popup-close" onclick="closeWelcomePopup()">&times;</button>
-                </div>
-                <div class="popup-body">
-                    <p>최신 영화와 드라마를 감상하세요!</p>
-                    <ul>
-                        <li>✨ 매일 업데이트되는 TOP 10</li>
-                        <li>🎭 다양한 장르별 컬렉션</li>
-                        <li>🔍 스마트 검색 기능</li>
-                        <li>📱 모든 기기에서 시청 가능</li>
-                        <li>😊 <strong>AI 감정 인식으로 맞춤 추천!</strong></li>
-                        </ul>
-                    <p>지금 바로 감정 분석을 통해 당신에게 맞는 영화를 찾아보세요!</p>
-                    </div>
-                    <div class="popup-footer">
-                    <button class="popup-btn-primary" onclick="startEmotionDetection()">감정 분석 시작</button>
-                    <button class="popup-btn-secondary" onclick="closeWelcomePopup(true)">다시 보지 않기</button>
-                </div>
-                </div>
-                
-                <!-- 두 번째 화면: 웹캠 감정 인식 -->
-                <div id="emotionScreen" class="popup-screen">
-                    <div class="popup-header">
-                        <h2>😊 감정 분석 중...</h2>
-                        <button class="popup-close" onclick="closeWelcomePopup()">&times;</button>
-                    </div>
-                    <div class="popup-body emotion-detection">
-                        <div class="webcam-container">
-                            <video id="webcam" autoplay muted playsinline></video>
-                            <canvas id="overlay"></canvas>
-                            <div id="loading" class="loading-spinner">
-                                <div class="spinner"></div>
-                                <p>AI 모델 로딩 중...</p>
-                            </div>
-                            <!-- 사진 촬영 버튼 추가 -->
-                            <div class="capture-controls">
-                                <button id="captureBtn" class="capture-button">📸 사진 찍고 감정 분석</button>
-                            </div>
-                            <!-- 촬영된 사진 표시 영역 -->
-                            <div id="capturedPhoto" class="captured-photo" style="display: none;">
-                                <canvas id="photoCanvas"></canvas>
-                                <p>촬영된 사진</p>
-                            </div>
-                        </div>
-                        <div class="emotion-results">
-                            <div class="emotion-status">
-                                <h3 id="currentEmotion">😐 감정을 분석하고 있습니다...</h3>
-                                <div class="emotion-confidence">
-                                    <span id="confidence">정확도: 0%</span>
-                                </div>
-                            </div>
-                            <div class="emotion-bars">
-                                <div class="emotion-bar">
-                                    <span>기쁨 😊</span>
-                                    <div class="bar">
-                                        <div class="fill" id="happyBar"></div>
-                                    </div>
-                                    <span id="happyScore">0%</span>
-                                </div>
-                                <div class="emotion-bar">
-                                    <span>슬픔 😢</span>
-                                    <div class="bar">
-                                        <div class="fill" id="sadBar"></div>
-                                    </div>
-                                    <span id="sadScore">0%</span>
-                                </div>
-                                <div class="emotion-bar">
-                                    <span>화남 😠</span>
-                                    <div class="bar">
-                                        <div class="fill" id="angryBar"></div>
-                                    </div>
-                                    <span id="angryScore">0%</span>
-                                </div>
-                                <div class="emotion-bar">
-                                    <span>놀람 😮</span>
-                                    <div class="bar">
-                                        <div class="fill" id="surpriseBar"></div>
-                                    </div>
-                                    <span id="surpriseScore">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="popup-footer">
-                        <button class="popup-btn-primary" onclick="getMovieRecommendation()">추천 영화 보기</button>
-                        <button class="popup-btn-secondary" onclick="backToWelcome()">뒤로 가기</button>
-                    </div>
-            </div>
-        </div>
-    </div>
-
     <header class="header">
         <div class="left-group">
             <img src="images/logo.png" alt="Logo" class="emotion_cinema-logo">
@@ -156,6 +100,15 @@
                 <li onclick="bs(3)" class="BB"></li>
             </ul>
         </div>
+<!-- 감정 분석 섹션 추가 -->
+<section class="emotion-analysis-section">
+    <h2>🎭 AI 감정 인식으로 맞춤 영화 추천</h2>
+    <p>당신의 표정을 분석하여 지금 기분에 딱 맞는 영화를 추천해드립니다!</p>
+    <a href="emotion_test_simple.html" class="emotion-btn">
+        📹 감정 분석 시작하기
+    </a>
+</section>
+
         <section>
             <h1>오늘의 영화 TOP10</h1>
             <div id="movie-top10" class="top10-container"></div>
